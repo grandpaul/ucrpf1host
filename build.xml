@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<project name="linne-otoinimerge" default="package" basedir=".">
+        <property name="src.dir" value="."/>
+        <property name="build.dir" value="classes"/>
+        <property name="jar.dir" value="."/>
+
+        <path id="maincp">
+	  <pathelement path="/usr/share/java/junit.jar" />
+	  <pathelement path="/usr/share/java/RXTXcomm.jar" />
+	</path>
+
+	<target name="build">
+	  <mkdir dir="${build.dir}"/>
+	  <javac srcdir="${src.dir}" destdir="${build.dir}" includeantruntime="true">
+		<compilerarg value="-Xlint:deprecation" />
+		<classpath refid="maincp">
+		</classpath>
+	  </javac>
+	</target>
+
+	<target name="test" depends="build">
+	  <junit printsummary="yes">
+	    <formatter type="plain" usefile="false" />
+	    <classpath refid="maincp">
+	    </classpath>
+	    <classpath>
+	      <pathelement path="${build.dir}"/>
+	    </classpath>
+	  </junit>
+	</target>
+	<target name="test-withnet" depends="test">
+	  <junit printsummary="yes">
+	    <formatter type="plain" usefile="false" />
+	    <classpath refid="maincp">
+	    </classpath>
+	    <classpath>
+	      <pathelement path="${build.dir}"/>
+	    </classpath>
+	  </junit>
+	</target>
+	<target name="package" depends="build">
+	  <jar destfile="ucrpf1host.jar" level="9"
+	       excludes="ucrpf1host.jar">
+	    <fileset dir="${build.dir}"/>
+	    <fileset dir="properties"/>
+	    <manifest>
+	      <attribute name="Manifest-Version" value="1.0" />
+	      <attribute name="Main-Class" value="com.ucrobotics.yliu.ucrpf1host.Main" />
+	      <attribute name="Class-Path" value="${jar.classpath} /usr/share/java/junit.jar /usr/share/java/RXTXcomm.jar" />
+	    </manifest>
+	  </jar>
+	</target>
+	<target name="clean">
+		<delete failonerror="false" includeemptydirs="true">
+			<fileset file="*.class" />
+			<fileset dir="com/ucrobotics/yliu">
+			  <include name="**/*.class" />
+			</fileset>
+			<fileset file="ucrpf1host.jar" />
+		</delete>
+		<delete dir="${build.dir}"/>
+	</target>
+</project>
