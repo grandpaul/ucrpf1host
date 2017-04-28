@@ -13,12 +13,22 @@ import javax.swing.border.*;
 import javax.swing.event.*;
 import java.util.*;
 
+/**
+ * This class is for the GUI.
+ * Please implement all the UI logics here
+ *
+ * @author Paul Liu
+ */
 public class MyApplet extends JApplet {
 
     private JPanel cards = null;
     private java.util.logging.Logger logger = null;
     public static String loggerName = "MainLogger";
+    private PF1Device pf1Device = null;
 
+    /**
+     * init the UI layout and connect the ActionListeners
+     */
     public void init() {
 	Container cp = getContentPane();
 	JPanel mainPanel = null;
@@ -90,7 +100,7 @@ public class MyApplet extends JApplet {
 	    deviceComboBox.addItem(dev);
 	}
 	JButton connectButton = new JButton("Connect");
-	connectButton.addActionListener(new ConnectButtonActionListener());
+	connectButton.addActionListener(new ConnectButtonActionListener(deviceComboBox));
 	
 	connectPanel.add(deviceComboBox);
 	connectPanel.add(connectButton);
@@ -110,6 +120,7 @@ public class MyApplet extends JApplet {
 	    logger.info("Print");
 	}
     }
+
     class FilamentButtonActionListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 	    logger.info("Filament");
@@ -117,36 +128,43 @@ public class MyApplet extends JApplet {
 	    cl.show(cards, "FilamentPanel");
 	}
     }
+
     class PreheatButtonActionListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 	    logger.info("Preheat");
 	}
     }
+
     class UtilitiesButtonActionListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 	    logger.info("Utilities");
 	}
     }
+
     class SettingsButtonActionListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 	    logger.info("Settings");
 	}
     }
+
     class InfoButtonActionListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 	    logger.info("Info");
 	}
     }
+
     class LoadFilamentButtonActionListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 	    logger.info("Load Filamente");
 	}
     }
+
     class UnloadFilamentButtonActionListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 	    logger.info("Unload Filamente");
 	}
     }
+
     class BackToMainButtonActionListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 	    logger.info("Unload Filamente");
@@ -154,10 +172,27 @@ public class MyApplet extends JApplet {
 	    cl.show(cards, "MainPanel");
 	}
     }
+
     class ConnectButtonActionListener implements ActionListener {
+	private JComboBox deviceComboBox = null;
+	public ConnectButtonActionListener(JComboBox deviceComboBox) {
+	    this.deviceComboBox = deviceComboBox;
+	}
 	public void actionPerformed(ActionEvent e) {
 	    logger.info("Connect");
 	    ((CardLayout)cards.getLayout()).show(cards, "MainPanel");
+	    try {
+		pf1Device = new PF1Device((String)deviceComboBox.getSelectedItem());
+	    } catch (java.io.FileNotFoundException e1) {
+		logger.info("Get FileNotFoundException when creating PF1Device");
+		pf1Device = null;
+	    } catch (gnu.io.PortInUseException e1) {
+		logger.info("Get PortInUseException when creating PF1Device");
+		pf1Device = null;
+	    } catch (gnu.io.UnsupportedCommOperationException e1) {
+		logger.info("Get UnsupportedCommOperationException when creating PF1Device");
+		pf1Device = null;
+	    }		
 	}
     }
     
