@@ -43,8 +43,10 @@ public class MyApplet extends JApplet {
     private PF1Device pf1Device = null;
     private LoadFilamentCommandSender loadFilamentThread = null;
     private UnloadFilamentCommandSender unloadFilamentThread = null;
+    private FileCommandSender fileCommandSenderThread = null;
 
     private JTextField loadFilamentStatusJTextField = null;
+    private JProgressBar printProgressJProgressBar = null;
     
     /**
      * init the UI layout and connect the ActionListeners
@@ -96,6 +98,7 @@ public class MyApplet extends JApplet {
 	JPanel progressPanel = new JPanel();
 	progressPanel.setLayout(new GridBagLayout());
 	JProgressBar progressBar = new JProgressBar();
+	this.printProgressJProgressBar = progressBar;
 	GridBagConstraints progressBarGC = new GridBagConstraints();
 	progressBar.setIndeterminate(true);
 	progressBarGC.gridx = 2;
@@ -275,7 +278,10 @@ public class MyApplet extends JApplet {
 	    if (returnVal == JFileChooser.APPROVE_OPTION) {
 		logger.info("You chose to open this file: " +
 			    chooser.getSelectedFile().getName());
+		fileCommandSenderThread = new FileCommandSender(pf1Device, chooser.getSelectedFile());
 		
+		fileCommandSenderThread.addProgressBar(printProgressJProgressBar);
+		fileCommandSenderThread.start();
 		goToCard("PrintingInfoPanel");
 	    }
 	}
@@ -353,13 +359,51 @@ public class MyApplet extends JApplet {
 		}
 		unloadFilamentThread = null;
 	    }
+	    if (fileCommandSenderThread != null) {
+		fileCommandSenderThread.pleaseStop();
+		try {
+		    fileCommandSenderThread.join();
+		} catch (InterruptedException e1) {
+		    e1.printStackTrace();
+		}
+		fileCommandSenderThread = null;
+		printProgressJProgressBar.setIndeterminate(true);
+	    }
 	    goToCard("FilamentPanel");
 	}
     }
 
     class BackToMainButtonActionListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
-	    logger.info("Unload Filamente");
+	    logger.info("BackToMainButton");
+	    if (loadFilamentThread != null) {
+		loadFilamentThread.pleaseStop();
+		try {
+		    loadFilamentThread.join();
+		} catch (InterruptedException e1) {
+		    e1.printStackTrace();
+		}
+		loadFilamentThread = null;
+	    }
+	    if (unloadFilamentThread != null) {
+		unloadFilamentThread.pleaseStop();
+		try {
+		    unloadFilamentThread.join();
+		} catch (InterruptedException e1) {
+		    e1.printStackTrace();
+		}
+		unloadFilamentThread = null;
+	    }
+	    if (fileCommandSenderThread != null) {
+		fileCommandSenderThread.pleaseStop();
+		try {
+		    fileCommandSenderThread.join();
+		} catch (InterruptedException e1) {
+		    e1.printStackTrace();
+		}
+		fileCommandSenderThread = null;
+		printProgressJProgressBar.setIndeterminate(true);
+	    }
 	    goToCard("MainPanel");
 	}
     }
