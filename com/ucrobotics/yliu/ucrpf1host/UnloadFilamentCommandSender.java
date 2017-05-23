@@ -74,7 +74,7 @@ public class UnloadFilamentCommandSender extends Thread {
 	pf1Device.sendCommand("M109 S215");
 	/* extruding */
 	for (javax.swing.text.JTextComponent jTextComponent: statusTextComponents) {
-	    jTextComponent.setText("Loading");
+	    jTextComponent.setText("Unloading");
 	}
 	while (runningFlag) {
 	    pf1Device.sendCommand("G92 E0");
