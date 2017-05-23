@@ -19,7 +19,6 @@ package com.ucrobotics.yliu.ucrpf1host;
 
 import java.util.logging.*;
 import java.util.*;
-import gnu.io.*;
 
 /**
  * A thread to load filament.
