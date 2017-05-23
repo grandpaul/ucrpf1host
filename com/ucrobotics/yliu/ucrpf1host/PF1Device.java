@@ -12,12 +12,14 @@ public class PF1Device {
     private java.util.logging.Logger logger = null;
     public static String loggerName = "PF1DeviceLogger";
     private SerialPort serialPort = null;
+    private PF1DeviceServer pf1DeviceServer = null;
     private Thread pf1DeviceServerThread = null;
     private double extruderX = 0.0;
     private double extruderY = 0.0;
     private double extruderZ = 0.0;
     private double extruderE = 0.0;
     private double extruderF = 0.0;
+    private double extruderTemperature = 0.0;
 
     /**
      * Constructor for PF1Device
@@ -43,7 +45,8 @@ public class PF1Device {
 	serialPort = (SerialPort)commPort;
 	serialPort.setSerialPortParams(115200, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
 
-	pf1DeviceServerThread = new Thread(new PF1DeviceServer(this));
+	pf1DeviceServer = new PF1DeviceServer(this);
+	pf1DeviceServerThread = new Thread(pf1DeviceServer);
 	pf1DeviceServerThread.start();
     }
 
@@ -125,5 +128,20 @@ public class PF1Device {
     }
     public void setExtruderF(double extruderE) {
 	this.extruderE = extruderE;
+    }
+
+    public void setExtruderTemperature(double t) {
+	this.extruderTemperature = t;
+    }
+    public double getExtruderTemperature() {
+	return extruderTemperature;
+    }
+
+    /**
+     * Put a gcode to the commandQueue of the PF1DeviceServer.
+     * May block until the queue is empty.
+     */
+    public void sendCommand(String gcode) {
+	pf1DeviceServer.sendCommand(gcode);
     }
 }

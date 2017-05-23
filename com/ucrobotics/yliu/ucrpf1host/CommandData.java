@@ -89,11 +89,11 @@ public class CommandData {
 	long ret = 5000;   // default: 5 sec
 	String data = getStripedCommand();
 	if (data.startsWith("M104")) {
-	    return -1;
+	    return 3000;
 	} else if (data.startsWith("G28")) {
-	    return -1;
+	    return 60000;
 	} else if (data.startsWith("M109")) {
-	    return -1;
+	    return 600000;
 	} else if (data.startsWith("M105")) {
 	    return 1500;
 	}

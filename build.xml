@@ -13,9 +13,11 @@
 	<target name="build">
 	  <mkdir dir="${build.dir}"/>
 	  <javac srcdir="${src.dir}" destdir="${build.dir}" includeantruntime="true">
-		<compilerarg value="-Xlint:deprecation" />
-		<classpath refid="maincp">
-		</classpath>
+	    <compilerarg value="-Xlint:deprecation" />
+	    <compilerarg value="-Xlint:unchecked" />
+	    
+	    <classpath refid="maincp">
+	    </classpath>
 	  </javac>
 	</target>
 

@@ -245,7 +245,7 @@ public class PF1DeviceServer implements Runnable {
 
 	/* reading inQueue */
 	long commandTimeout=command.getEstimatedTimeout();
-	while (commandTimeout == -1 || command.getTimestamp() + commandTimeout <= Calendar.getInstance().getTimeInMillis()) {
+	while (commandTimeout == -1 || command.getTimestamp() + commandTimeout >= Calendar.getInstance().getTimeInMillis()) {
 	    ReceivedData rd = null;
 	    if (commandTimeout == -1) {
 		try {
@@ -263,6 +263,9 @@ public class PF1DeviceServer implements Runnable {
 	    
 	    if (rd != null) {
 		command.addAnswer(rd);
+		if (rd.getExtruderTemperature() != -1.0) {
+		    pf1Device.setExtruderTemperature(rd.getExtruderTemperature());
+		}
 		if (rd.isOK()) {
 		    return -1;
 		} else if (rd.getResend()>0) {
@@ -302,7 +305,7 @@ public class PF1DeviceServer implements Runnable {
 	while (true) {
 	    CommandData cmdData = null;
 	    try {
-		commandQueue.poll(3, java.util.concurrent.TimeUnit.SECONDS);
+		cmdData = commandQueue.poll(3, java.util.concurrent.TimeUnit.SECONDS);
 	    } catch (java.lang.InterruptedException e) {
 		logger.info("java.lang.InterruptedException");
 		continue;
@@ -318,6 +321,22 @@ public class PF1DeviceServer implements Runnable {
 		logger.info(String.format("Execute %1$s",cmdData.getCommand()));
 		doSend(cmdData);
 	    }
+	}
+    }
+
+    /**
+     * Put a gcode to the commandQUeue. May block until the queue is empty.
+     */
+    public void sendCommand(String gcode) {
+	CommandData cmdData = new CommandData();
+	cmdData.setCommand(gcode);
+	while (true) {
+	    try {
+		commandQueue.put(cmdData);
+	    } catch (InterruptedException e) {
+		continue;
+	    }
+	    break;
 	}
     }
 }

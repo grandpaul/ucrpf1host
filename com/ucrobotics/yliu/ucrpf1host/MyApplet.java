@@ -25,6 +25,7 @@ public class MyApplet extends JApplet {
     private java.util.logging.Logger logger = null;
     public static String loggerName = "MainLogger";
     private PF1Device pf1Device = null;
+    private LoadFilamentThread loadFilamentThread = null;
 
     /**
      * init the UI layout and connect the ActionListeners
@@ -52,6 +53,8 @@ public class MyApplet extends JApplet {
 	JPanel printingInfoPanel = createPrintingInfoPanel();
 	cards.add(printingInfoPanel, "PrintingInfoPanel");
 
+	cards.add(createLoadFilamentPanel(), "LoadFilamentPanel");
+	
 	/* default card */
 	goToCard("ConnectPanel");
     }
@@ -115,7 +118,7 @@ public class MyApplet extends JApplet {
 	connectPanel.setLayout(new FlowLayout());
 
 	ArrayList<String> devices = PF1Device.listDevices();
-	JComboBox deviceComboBox = new JComboBox();
+	JComboBox<String> deviceComboBox = new JComboBox<String>();
 	for (String dev : devices) {
 	    deviceComboBox.addItem(dev);
 	}
@@ -158,6 +161,41 @@ public class MyApplet extends JApplet {
 	filamentPanel.add(backToMainButton, BorderLayout.SOUTH);
 	return filamentPanel;
     }
+
+    /**
+     * Create "LoadFilamentPanel".
+     * This function should be only called once in 
+     * init().
+     *
+     * @return: a JPanel for "FilamentPanel"
+     */
+    private JPanel createLoadFilamentPanel() {
+	JPanel loadFilamentPanel = new JPanel();
+	loadFilamentPanel.setLayout(new BorderLayout());
+
+	JLabel label1 = new JLabel("Temperature: ");
+	JTextField textField1 = new JTextField();
+	JLabel label2 = new JLabel("Status: ");
+	JTextField textField2 = new JTextField();
+	
+
+	JPanel loadFilamentPanelBox1 = new JPanel();
+	loadFilamentPanelBox1.setLayout(new GridLayout(2,2));
+
+	
+	
+	JButton stopButton = new JButton("Stop Loading");
+	stopButton.addActionListener(new StopLoadFilamentButtonActionListener());
+
+	loadFilamentPanelBox1.add(label1);
+	loadFilamentPanelBox1.add(textField1);
+	loadFilamentPanelBox1.add(label2);
+	loadFilamentPanelBox1.add(textField2);
+	loadFilamentPanel.add(loadFilamentPanelBox1, BorderLayout.CENTER);
+	loadFilamentPanel.add(stopButton, BorderLayout.SOUTH);
+	return loadFilamentPanel;
+    }
+
     
     /**
      * Create "MainPanel".
@@ -257,12 +295,31 @@ public class MyApplet extends JApplet {
     class LoadFilamentButtonActionListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 	    logger.info("Load Filamente");
+	    loadFilamentThread = new LoadFilamentThread(pf1Device);
+	    loadFilamentThread.start();
+	    goToCard("LoadFilamentPanel");
 	}
     }
 
     class UnloadFilamentButtonActionListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 	    logger.info("Unload Filamente");
+	}
+    }
+
+    class StopLoadFilamentButtonActionListener implements ActionListener {
+	public void actionPerformed(ActionEvent e) {
+	    logger.info("Stop Load Filamente");
+	    if (loadFilamentThread != null) {
+		loadFilamentThread.pleaseStop();
+		try {
+		    loadFilamentThread.join();
+		} catch (InterruptedException e1) {
+		    e1.printStackTrace();
+		}
+		loadFilamentThread = null;
+	    }
+	    goToCard("FilamentPanel");
 	}
     }
 
