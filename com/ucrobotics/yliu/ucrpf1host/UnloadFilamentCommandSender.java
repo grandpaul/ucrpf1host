@@ -13,20 +13,29 @@ public class UnloadFilamentCommandSender extends Thread {
 
     private PF1Device pf1Device = null;
     private boolean runningFlag = true;
+    private ArrayList<javax.swing.text.JTextComponent> statusTextComponents = null;
 
     public UnloadFilamentCommandSender(PF1Device pf1Device) {
 	super();
 	this.pf1Device = pf1Device;
 	this.runningFlag = true;
+	this.statusTextComponents = new ArrayList<javax.swing.text.JTextComponent>();
     }
 
     public void pleaseStop() {
 	this.runningFlag=false;
     }
 
+    public void addStatusJTextComponent(javax.swing.text.JTextComponent component) {
+	this.statusTextComponents.add(component);
+    }
+
     public void run() {
 	pf1Device.sendCommand("G21");
 	/* homing */
+	for (javax.swing.text.JTextComponent jTextComponent: statusTextComponents) {
+	    jTextComponent.setText("Homing");
+	}
 	if (!runningFlag) {
 	    return;
 	}
@@ -52,6 +61,9 @@ public class UnloadFilamentCommandSender extends Thread {
 	}
 	pf1Device.sendCommand("G1 Z50 F3000");
 	/* heating */
+	for (javax.swing.text.JTextComponent jTextComponent: statusTextComponents) {
+	    jTextComponent.setText("Heating");
+	}
 	if (!runningFlag) {
 	    return;
 	}
@@ -61,6 +73,9 @@ public class UnloadFilamentCommandSender extends Thread {
 	}
 	pf1Device.sendCommand("M109 S215");
 	/* extruding */
+	for (javax.swing.text.JTextComponent jTextComponent: statusTextComponents) {
+	    jTextComponent.setText("Loading");
+	}
 	while (runningFlag) {
 	    pf1Device.sendCommand("G92 E0");
 	    pf1Device.sendCommand("G1 E-5.0 F300");

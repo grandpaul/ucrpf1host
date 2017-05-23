@@ -28,6 +28,8 @@ public class MyApplet extends JApplet {
     private LoadFilamentCommandSender loadFilamentThread = null;
     private UnloadFilamentCommandSender unloadFilamentThread = null;
 
+    private JTextField loadFilamentStatusJTextField = null;
+    
     /**
      * init the UI layout and connect the ActionListeners
      */
@@ -178,7 +180,8 @@ public class MyApplet extends JApplet {
 	JTextField textField1 = new JTextField();
 	JLabel label2 = new JLabel("Status: ");
 	JTextField textField2 = new JTextField();
-	
+
+	this.loadFilamentStatusJTextField = textField2;
 
 	JPanel loadFilamentPanelBox1 = new JPanel();
 	loadFilamentPanelBox1.setLayout(new GridLayout(2,2));
@@ -297,6 +300,7 @@ public class MyApplet extends JApplet {
 	public void actionPerformed(ActionEvent e) {
 	    logger.info("Load Filamente");
 	    loadFilamentThread = new LoadFilamentCommandSender(pf1Device);
+	    loadFilamentThread.addStatusJTextComponent(loadFilamentStatusJTextField);
 	    loadFilamentThread.start();
 	    goToCard("LoadFilamentPanel");
 	}
@@ -306,6 +310,7 @@ public class MyApplet extends JApplet {
 	public void actionPerformed(ActionEvent e) {
 	    logger.info("Unload Filamente");
 	    unloadFilamentThread = new UnloadFilamentCommandSender(pf1Device);
+	    unloadFilamentThread.addStatusJTextComponent(loadFilamentStatusJTextField);
 	    unloadFilamentThread.start();
 	    goToCard("LoadFilamentPanel");
 	}
