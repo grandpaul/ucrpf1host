@@ -101,6 +101,9 @@ public class FileCommandSender extends Thread {
 	String line = null;
 	try {
 	    while ( (line = br.readLine()) != null) {
+		if (!runningFlag) {
+		    break;
+		}
 		for (javax.swing.JProgressBar progressBar : progressBars) {
 		    progressBar.setValue(c);
 		}
