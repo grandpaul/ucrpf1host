@@ -25,7 +25,8 @@ public class MyApplet extends JApplet {
     private java.util.logging.Logger logger = null;
     public static String loggerName = "MainLogger";
     private PF1Device pf1Device = null;
-    private LoadFilamentThread loadFilamentThread = null;
+    private LoadFilamentCommandSender loadFilamentThread = null;
+    private UnloadFilamentCommandSender unloadFilamentThread = null;
 
     /**
      * init the UI layout and connect the ActionListeners
@@ -295,7 +296,7 @@ public class MyApplet extends JApplet {
     class LoadFilamentButtonActionListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 	    logger.info("Load Filamente");
-	    loadFilamentThread = new LoadFilamentThread(pf1Device);
+	    loadFilamentThread = new LoadFilamentCommandSender(pf1Device);
 	    loadFilamentThread.start();
 	    goToCard("LoadFilamentPanel");
 	}
@@ -304,6 +305,9 @@ public class MyApplet extends JApplet {
     class UnloadFilamentButtonActionListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 	    logger.info("Unload Filamente");
+	    unloadFilamentThread = new UnloadFilamentCommandSender(pf1Device);
+	    unloadFilamentThread.start();
+	    goToCard("LoadFilamentPanel");
 	}
     }
 
@@ -318,6 +322,15 @@ public class MyApplet extends JApplet {
 		    e1.printStackTrace();
 		}
 		loadFilamentThread = null;
+	    }
+	    if (unloadFilamentThread != null) {
+		unloadFilamentThread.pleaseStop();
+		try {
+		    unloadFilamentThread.join();
+		} catch (InterruptedException e1) {
+		    e1.printStackTrace();
+		}
+		unloadFilamentThread = null;
 	    }
 	    goToCard("FilamentPanel");
 	}
