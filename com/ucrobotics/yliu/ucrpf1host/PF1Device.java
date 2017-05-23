@@ -13,6 +13,11 @@ public class PF1Device {
     public static String loggerName = "PF1DeviceLogger";
     private SerialPort serialPort = null;
     private Thread pf1DeviceServerThread = null;
+    private double extruderX = 0.0;
+    private double extruderY = 0.0;
+    private double extruderZ = 0.0;
+    private double extruderE = 0.0;
+    private double extruderF = 0.0;
 
     /**
      * Constructor for PF1Device
@@ -38,8 +43,15 @@ public class PF1Device {
 	serialPort = (SerialPort)commPort;
 	serialPort.setSerialPortParams(115200, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
 
-	pf1DeviceServerThread = new Thread(new PF1DeviceServer(serialPort));
+	pf1DeviceServerThread = new Thread(new PF1DeviceServer(this));
 	pf1DeviceServerThread.start();
+    }
+
+    /**
+     * get the Serial port of the PF1Device
+     */
+    public SerialPort getSerialPort() {
+	return serialPort;
     }
 
     /**
@@ -72,12 +84,46 @@ public class PF1Device {
 	Enumeration ports = CommPortIdentifier.getPortIdentifiers();
 	while (ports.hasMoreElements()) {
 	    CommPortIdentifier port = (CommPortIdentifier) ports.nextElement();
+	    java.util.logging.Logger.getLogger(PF1Device.loggerName).info(String.format("Found device name: %1$s", port.getName()));
+	    ret.add(port.getName());
 	    if (port.getPortType() != CommPortIdentifier.PORT_SERIAL) {
+		java.util.logging.Logger.getLogger(PF1Device.loggerName).info(String.format("Device: %1$s is not a serial port", port.getName()));
 		continue;
 	    }
 	    java.util.logging.Logger.getLogger(PF1Device.loggerName).info(String.format("Name: %1$s", port.getName()));
 	    ret.add(port.getName());
 	}
 	return ret;
+    }
+
+    public double getExtruderX() {
+	return extruderX;
+    }
+    public void setExtruderX(double extruderX) {
+	this.extruderX = extruderX;
+    }
+    public double getExtruderY() {
+	return extruderY;
+    }
+    public void setExtruderY(double extruderY) {
+	this.extruderY = extruderY;
+    }
+    public double getExtruderZ() {
+	return extruderZ;
+    }
+    public void setExtruderZ(double extruderZ) {
+	this.extruderZ = extruderZ;
+    }
+    public double getExtruderE() {
+	return extruderE;
+    }
+    public void setExtruderE(double extruderE) {
+	this.extruderE = extruderE;
+    }
+    public double getExtruderF() {
+	return extruderE;
+    }
+    public void setExtruderF(double extruderE) {
+	this.extruderE = extruderE;
     }
 }

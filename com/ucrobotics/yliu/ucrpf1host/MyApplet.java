@@ -72,10 +72,34 @@ public class MyApplet extends JApplet {
 	printingInfoPanel.add(backToMainButton, BorderLayout.SOUTH);
 
 	JPanel progressPanel = new JPanel();
+	progressPanel.setLayout(new GridBagLayout());
 	JProgressBar progressBar = new JProgressBar();
+	GridBagConstraints progressBarGC = new GridBagConstraints();
 	progressBar.setIndeterminate(true);
-	progressPanel.add(progressBar);
+	progressBarGC.gridx = 2;
+	progressBarGC.gridy = 2;
+	progressBarGC.gridwidth = 1;
+	progressBarGC.gridheight = 1;
+	progressBarGC.weightx = 0;
+	progressBarGC.weighty = 0;
+	progressBarGC.fill = GridBagConstraints.BOTH;
+	progressBarGC.anchor = GridBagConstraints.CENTER;
+	progressPanel.add(progressBar, progressBarGC);
+
+	JLabel progressLabel = new JLabel("Progress:");
+	GridBagConstraints progressLabelGC = new GridBagConstraints();
+	progressLabelGC.gridx = 1;
+	progressLabelGC.gridy = 2;
+	progressLabelGC.gridwidth = 1;
+	progressLabelGC.gridheight = 1;
+	progressLabelGC.weightx = 0;
+	progressLabelGC.weighty = 0;
+	progressLabelGC.fill = GridBagConstraints.BOTH;
+	progressLabelGC.anchor = GridBagConstraints.CENTER;
+	progressPanel.add(progressLabel, progressLabelGC);
+	
 	printingInfoPanel.add(progressPanel, BorderLayout.CENTER);
+	
 	return printingInfoPanel;
     }
 
@@ -95,6 +119,8 @@ public class MyApplet extends JApplet {
 	for (String dev : devices) {
 	    deviceComboBox.addItem(dev);
 	}
+	//deviceComboBox.setEditable(true);
+	
 	JButton connectButton = new JButton("Connect");
 	connectButton.addActionListener(new ConnectButtonActionListener(deviceComboBox));
 	
@@ -184,7 +210,16 @@ public class MyApplet extends JApplet {
     class PrintButtonActionListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 	    logger.info("Print");
-	    goToCard("PrintingInfoPanel");
+	    JFileChooser chooser = new JFileChooser();
+	    javax.swing.filechooser.FileNameExtensionFilter filter = new javax.swing.filechooser.FileNameExtensionFilter("GCode files", "gcode");
+	    chooser.setFileFilter(filter);
+	    int returnVal = chooser.showOpenDialog(MyApplet.this);
+	    if (returnVal == JFileChooser.APPROVE_OPTION) {
+		logger.info("You chose to open this file: " +
+			    chooser.getSelectedFile().getName());
+		
+		goToCard("PrintingInfoPanel");
+	    }
 	}
     }
 
