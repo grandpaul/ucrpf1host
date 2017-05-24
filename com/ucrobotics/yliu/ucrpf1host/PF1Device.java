@@ -140,21 +140,27 @@ public class PF1Device {
     public void setExtruderE(double extruderE) {
 	double oldExtruderE = this.extruderE;
 	this.extruderE = extruderE;
-	mPcs.firePropertyChange("extruderE", new Double(oldExtruderE), new Double(extruderE));
+	if (oldExtruderE != extruderE) {
+	    mPcs.firePropertyChange("extruderE", new Double(oldExtruderE), new Double(extruderE));
+	}
     }
     public double getExtruderF() {
-	return extruderE;
+	return extruderF;
     }
     public void setExtruderF(double extruderF) {
 	double oldExtruderF = this.extruderF;
-	this.extruderE = extruderF;
-	mPcs.firePropertyChange("extruderF", new Double(oldExtruderF), new Double(extruderF));
+	this.extruderF = extruderF;
+	if (oldExtruderF != extruderF) {
+	    mPcs.firePropertyChange("extruderF", new Double(oldExtruderF), new Double(extruderF));
+	}
     }
 
     public void setExtruderTemperature(double t) {
 	double oldTemperature = this.extruderTemperature;
 	this.extruderTemperature = t;
-	mPcs.firePropertyChange("extruderTemperature", new Double(oldTemperature), new Double(t));
+	if (oldTemperature != t) {
+	    mPcs.firePropertyChange("extruderTemperature", new Double(oldTemperature), new Double(t));
+	}
     }
     public double getExtruderTemperature() {
 	return extruderTemperature;
