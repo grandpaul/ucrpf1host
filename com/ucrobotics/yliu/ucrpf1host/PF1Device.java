@@ -36,6 +36,7 @@ public class PF1Device {
     private double extruderE = 0.0;
     private double extruderF = 0.0;
     private double extruderTemperature = 0.0;
+    private java.beans.PropertyChangeSupport mPcs = new java.beans.PropertyChangeSupport(this);
 
     /**
      * Constructor for PF1Device
@@ -137,20 +138,33 @@ public class PF1Device {
 	return extruderE;
     }
     public void setExtruderE(double extruderE) {
+	double oldExtruderE = this.extruderE;
 	this.extruderE = extruderE;
+	mPcs.firePropertyChange("extruderE", new Double(oldExtruderE), new Double(extruderE));
     }
     public double getExtruderF() {
 	return extruderE;
     }
-    public void setExtruderF(double extruderE) {
-	this.extruderE = extruderE;
+    public void setExtruderF(double extruderF) {
+	double oldExtruderF = this.extruderF;
+	this.extruderE = extruderF;
+	mPcs.firePropertyChange("extruderF", new Double(oldExtruderF), new Double(extruderF));
     }
 
     public void setExtruderTemperature(double t) {
+	double oldTemperature = this.extruderTemperature;
 	this.extruderTemperature = t;
+	mPcs.firePropertyChange("extruderTemperature", new Double(oldTemperature), new Double(t));
     }
     public double getExtruderTemperature() {
 	return extruderTemperature;
+    }
+
+    public void addPropertyChangeListener(java.beans.PropertyChangeListener listener) {
+	mPcs.addPropertyChangeListener(listener);
+    }
+    public void removePropertyChangeListener(java.beans.PropertyChangeListener listener) {
+	mPcs.removePropertyChangeListener(listener);
     }
 
     /**

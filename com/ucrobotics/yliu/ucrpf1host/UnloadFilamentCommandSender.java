@@ -28,29 +28,22 @@ public class UnloadFilamentCommandSender extends Thread {
 
     private PF1Device pf1Device = null;
     private boolean runningFlag = true;
-    private ArrayList<javax.swing.text.JTextComponent> statusTextComponents = null;
+    private java.beans.PropertyChangeSupport mPcs = new java.beans.PropertyChangeSupport(this);
 
     public UnloadFilamentCommandSender(PF1Device pf1Device) {
 	super();
 	this.pf1Device = pf1Device;
 	this.runningFlag = true;
-	this.statusTextComponents = new ArrayList<javax.swing.text.JTextComponent>();
     }
 
     public void pleaseStop() {
 	this.runningFlag=false;
     }
 
-    public void addStatusJTextComponent(javax.swing.text.JTextComponent component) {
-	this.statusTextComponents.add(component);
-    }
-
     public void run() {
 	pf1Device.sendCommand("G21");
 	/* homing */
-	for (javax.swing.text.JTextComponent jTextComponent: statusTextComponents) {
-	    jTextComponent.setText("Homing");
-	}
+	mPcs.firePropertyChange("status", "", "Homing");
 	if (!runningFlag) {
 	    return;
 	}
@@ -76,9 +69,7 @@ public class UnloadFilamentCommandSender extends Thread {
 	}
 	pf1Device.sendCommand("G1 Z50 F3000");
 	/* heating */
-	for (javax.swing.text.JTextComponent jTextComponent: statusTextComponents) {
-	    jTextComponent.setText("Heating");
-	}
+	mPcs.firePropertyChange("status", "Homing", "Heating");
 	if (!runningFlag) {
 	    return;
 	}
@@ -87,14 +78,31 @@ public class UnloadFilamentCommandSender extends Thread {
 	    return;
 	}
 	pf1Device.sendCommand("M109 S215");
-	/* extruding */
-	for (javax.swing.text.JTextComponent jTextComponent: statusTextComponents) {
-	    jTextComponent.setText("Unloading");
+	while (runningFlag) {
+	    double t1 = pf1Device.getExtruderTemperature();
+	    if (t1 >= 214.75) {
+		break;
+	    }
+	    try {
+		Thread.sleep(3000);
+	    } catch (InterruptedException e1) {
+	    }
 	}
+	/* extruding */
+	mPcs.firePropertyChange("status", "Heating", "Unloading");
 	while (runningFlag) {
 	    pf1Device.sendCommand("G92 E0");
 	    pf1Device.sendCommand("G1 E-5.0 F300");
 	    pf1Device.sendCommand("G92 E0");
 	}
+	mPcs.firePropertyChange("status", "Unloading", "");
     }
+
+    public void addPropertyChangeListener(java.beans.PropertyChangeListener listener) {
+	mPcs.addPropertyChangeListener(listener);
+    }
+    public void removePropertyChangeListener(java.beans.PropertyChangeListener listener) {
+	mPcs.removePropertyChangeListener(listener);
+    }
+
 }

@@ -322,7 +322,7 @@ public class MyApplet extends JApplet {
 	public void actionPerformed(ActionEvent e) {
 	    logger.info("Load Filamente");
 	    loadFilamentThread = new LoadFilamentCommandSender(pf1Device);
-	    loadFilamentThread.addStatusJTextComponent(loadFilamentStatusJTextField);
+	    loadFilamentThread.addPropertyChangeListener(new LoadFilamentCommandSenderPropertyChangeListener(loadFilamentStatusJTextField));
 	    loadFilamentThread.start();
 	    goToCard("LoadFilamentPanel");
 	}
@@ -332,7 +332,7 @@ public class MyApplet extends JApplet {
 	public void actionPerformed(ActionEvent e) {
 	    logger.info("Unload Filamente");
 	    unloadFilamentThread = new UnloadFilamentCommandSender(pf1Device);
-	    unloadFilamentThread.addStatusJTextComponent(loadFilamentStatusJTextField);
+	    unloadFilamentThread.addPropertyChangeListener(new LoadFilamentCommandSenderPropertyChangeListener(loadFilamentStatusJTextField));
 	    unloadFilamentThread.start();
 	    goToCard("LoadFilamentPanel");
 	}
@@ -430,5 +430,25 @@ public class MyApplet extends JApplet {
 	    }		
 	}
     }
-    
+
+    class LoadFilamentCommandSenderPropertyChangeListener implements java.beans.PropertyChangeListener {
+	private javax.swing.text.JTextComponent jTextComponent = null;
+	private JLabel jLabel = null;
+	public LoadFilamentCommandSenderPropertyChangeListener(javax.swing.text.JTextComponent jTextComponent) {
+	    this.jTextComponent = jTextComponent;
+	}
+	public LoadFilamentCommandSenderPropertyChangeListener(JLabel jLabel) {
+	    this.jLabel = jLabel;
+	}
+	public void propertyChange(java.beans.PropertyChangeEvent evt) {
+	    if (evt.getPropertyName().compareTo("status")==0) {
+		if (this.jTextComponent != null) {
+		    this.jTextComponent.setText((String)evt.getNewValue());
+		}
+		if (this.jLabel != null) {
+		    this.jLabel.setText((String)evt.getNewValue());
+		}
+	    }
+	}
+    }
 }
