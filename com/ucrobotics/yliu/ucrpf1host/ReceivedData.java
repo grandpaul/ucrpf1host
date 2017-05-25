@@ -32,7 +32,7 @@ public class ReceivedData {
 	timestamp = Calendar.getInstance().getTimeInMillis();
 	this.data = data;
 	resendPattern = Pattern.compile("[Rr][Ee][Ss][Ee][Nn][Dd][:]\\s*(\\d+)");
-	temperaturePattern = Pattern.compile("T:([0-9.]+)/([0-9.]+)\\s+B:([0-9.]+)/([0-9.]+)");
+	temperaturePattern = Pattern.compile(".*T:([0-9.]+)/([0-9.]+)\\s+B:([0-9.]+)/([0-9.]+).*");
     }
 
     public String getData() {
