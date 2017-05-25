@@ -31,6 +31,10 @@ public class FileCommandSender extends Thread {
     private boolean runningFlag = true;
     private File gcodeFile = null;
     private ArrayList<javax.swing.JProgressBar> progressBars = null;
+    private int numberOfLines = 0;
+    private int currentLine = 0;
+    private java.beans.PropertyChangeSupport mPcs = new java.beans.PropertyChangeSupport(this);
+    
 
     public FileCommandSender(PF1Device pf1Device, File gcodeFile) {
 	super();
@@ -38,10 +42,19 @@ public class FileCommandSender extends Thread {
 	this.gcodeFile = gcodeFile;
 	this.runningFlag = true;
 	this.progressBars = new ArrayList<javax.swing.JProgressBar>();
+	this.numberOfLines = getLines(this.gcodeFile);
     }
 
     public void pleaseStop() {
 	this.runningFlag=false;
+    }
+
+    public int getNumberOfLines() {
+	return numberOfLines;
+    }
+
+    public int getCurrentLine() {
+	return currentLine;
     }
 
     /** 
@@ -75,16 +88,15 @@ public class FileCommandSender extends Thread {
     }
 
     public void run() {
-	int N = getLines(gcodeFile);
-	int c = 0;
+	currentLine = 0;
 
-	if (N<=0) {
+	if (this.numberOfLines <= 0) {
 	    return;
 	}
 	for (javax.swing.JProgressBar progressBar : progressBars) {
 	    progressBar.setIndeterminate(false);
 	    progressBar.setMinimum(0);
-	    progressBar.setMaximum(N);
+	    progressBar.setMaximum(this.numberOfLines);
 	    progressBar.setValue(0);
 	}
 
@@ -105,13 +117,22 @@ public class FileCommandSender extends Thread {
 		    break;
 		}
 		for (javax.swing.JProgressBar progressBar : progressBars) {
-		    progressBar.setValue(c);
+		    progressBar.setValue(currentLine);
 		}
-		c = c + 1;
+		int oldCurrentLine = currentLine;
+		currentLine = currentLine + 1;
+		mPcs.firePropertyChange("currentLine", new Integer(oldCurrentLine), new Integer(currentLine));
 		pf1Device.sendCommand(line);
 	    }
 	} catch (IOException e) {
 	    return;
 	}
+    }
+    
+    public void addPropertyChangeListener(java.beans.PropertyChangeListener listener) {
+	mPcs.addPropertyChangeListener(listener);
+    }
+    public void removePropertyChangeListener(java.beans.PropertyChangeListener listener) {
+	mPcs.removePropertyChangeListener(listener);
     }
 }

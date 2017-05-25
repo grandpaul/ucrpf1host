@@ -185,7 +185,7 @@ public class PF1DeviceServer implements Runnable {
 				   pf1Device.getExtruderE(),
 				   pf1Device.getExtruderF());
 	historyQueue.add(cmdData);
-	while (historyQueue.size() >= 1000) {
+	while (historyQueue.size() >= 1500) {
 	    historyQueue.remove();
 	}
 	doResend(commandCounter-1);
