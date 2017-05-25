@@ -180,4 +180,20 @@ public class PF1Device {
     public void sendCommand(String gcode) {
 	pf1DeviceServer.sendCommand(gcode);
     }
+
+    public void close() {
+	if (pf1DeviceServer != null && pf1DeviceServerThread != null) {
+	    pf1DeviceServer.pleaseStop();
+	    try {
+		pf1DeviceServerThread.join();
+	    } catch (InterruptedException e) {
+	    }
+	    pf1DeviceServer = null;
+	    pf1DeviceServerThread = null;
+	}
+	if (serialPort != null) {
+	    serialPort.close();
+	    serialPort = null;
+	}
+    }
 }

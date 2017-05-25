@@ -34,19 +34,24 @@ public class Main {
     private Scanner stdin = new Scanner(System.in);
     private java.util.logging.Logger logger = null;
     public static String loggerName = "MainLogger";
+    private JApplet myapplet = null;
+    private JFrame myframe = null;
 
     /**
      * Init class data here
      */
     private void init() {
-	JApplet myapplet = null;
-	JFrame myframe = null;
+	myapplet = null;
+	myframe = null;
 
 	myapplet = new MyApplet();
-	myframe = new JFrame("ucrpF1host");
+	myframe = new JFrame("ucrPF1host");
+	//myframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	
 	myframe.addWindowListener(new WindowAdapter() {
 		public void windowClosing(WindowEvent e) {
+		    Window w = e.getWindow();
+		    myapplet.stop();
 		    System.exit(0);
 		}
 	    });

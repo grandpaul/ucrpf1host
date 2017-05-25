@@ -54,6 +54,7 @@ public class MyApplet extends JApplet {
      * init the UI layout and connect the ActionListeners
      */
     public void init() {
+	super.init();
 	Container cp = getContentPane();
 
 	this.logger = java.util.logging.Logger.getLogger(MyApplet.loggerName);
@@ -270,6 +271,14 @@ public class MyApplet extends JApplet {
 	((CardLayout)cards.getLayout()).show(cards, name);
     }
 
+    public void stop() {
+	if (pf1Device != null) {
+	    pf1Device.close();
+	    pf1Device = null;
+	}
+	super.stop();
+    }
+
     class PrintButtonActionListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 	    logger.info("Print");
@@ -324,7 +333,7 @@ public class MyApplet extends JApplet {
 	public void actionPerformed(ActionEvent e) {
 	    logger.info("Load Filamente");
 	    loadFilamentThread = new LoadFilamentCommandSender(pf1Device);
-	    loadFilamentThread.addPropertyChangeListener(new LoadFilamentCommandSenderPropertyChangeListener(loadFilamentStatusJTextField));
+	    loadFilamentThread.addPropertyChangeListener(new MyAppletPropertyChangeListener("status", loadFilamentStatusJTextField));
 	    loadFilamentThread.start();
 	    goToCard("LoadFilamentPanel");
 	}
@@ -334,7 +343,7 @@ public class MyApplet extends JApplet {
 	public void actionPerformed(ActionEvent e) {
 	    logger.info("Unload Filamente");
 	    unloadFilamentThread = new UnloadFilamentCommandSender(pf1Device);
-	    unloadFilamentThread.addPropertyChangeListener(new LoadFilamentCommandSenderPropertyChangeListener(loadFilamentStatusJTextField));
+	    unloadFilamentThread.addPropertyChangeListener(new MyAppletPropertyChangeListener("status", loadFilamentStatusJTextField));
 	    unloadFilamentThread.start();
 	    goToCard("LoadFilamentPanel");
 	}
@@ -433,22 +442,25 @@ public class MyApplet extends JApplet {
 	}
     }
 
-    class LoadFilamentCommandSenderPropertyChangeListener implements java.beans.PropertyChangeListener {
+    class MyAppletPropertyChangeListener implements java.beans.PropertyChangeListener {
 	private javax.swing.text.JTextComponent jTextComponent = null;
 	private JLabel jLabel = null;
-	public LoadFilamentCommandSenderPropertyChangeListener(javax.swing.text.JTextComponent jTextComponent) {
+	private String property = null;
+	public MyAppletPropertyChangeListener(String property, javax.swing.text.JTextComponent jTextComponent) {
+	    this.property = property;
 	    this.jTextComponent = jTextComponent;
 	}
-	public LoadFilamentCommandSenderPropertyChangeListener(JLabel jLabel) {
+	public MyAppletPropertyChangeListener(String property, JLabel jLabel) {
+	    this.property = property;
 	    this.jLabel = jLabel;
 	}
 	public void propertyChange(java.beans.PropertyChangeEvent evt) {
-	    if (evt.getPropertyName().compareTo("status")==0) {
+	    if (evt.getPropertyName().compareTo(this.property)==0) {
 		if (this.jTextComponent != null) {
-		    this.jTextComponent.setText((String)evt.getNewValue());
+		    this.jTextComponent.setText(evt.getNewValue().toString());
 		}
 		if (this.jLabel != null) {
-		    this.jLabel.setText((String)evt.getNewValue());
+		    this.jLabel.setText(evt.getNewValue().toString());
 		}
 	    }
 	}

@@ -36,6 +36,7 @@ public class PF1DeviceServer implements Runnable {
     private java.io.InputStream in = null;
     private java.io.OutputStream out = null;
     private PF1Device pf1Device = null;
+    private boolean runningFlag = true;
 
     public PF1DeviceServer(PF1Device pf1Device) {
         this.logger = java.util.logging.Logger.getLogger(PF1DeviceServer.loggerName);
@@ -318,7 +319,7 @@ public class PF1DeviceServer implements Runnable {
 	    return;
 	}
 	
-	while (true) {
+	while (runningFlag) {
 	    CommandData cmdData = null;
 	    try {
 		cmdData = commandQueue.poll(3, java.util.concurrent.TimeUnit.SECONDS);
@@ -354,5 +355,9 @@ public class PF1DeviceServer implements Runnable {
 	    }
 	    break;
 	}
+    }
+
+    public void pleaseStop() {
+	this.runningFlag=false;
     }
 }
