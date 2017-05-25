@@ -18,7 +18,10 @@
 	    
 	    <classpath refid="maincp">
 	    </classpath>
+
 	  </javac>
+	  <native2ascii encoding="UTF-8" src="${src.dir}/properties" dest="${build.dir}"
+			includes="ucrpf1host_zh_TW.properties.txt" ext="" />
 	</target>
 
 	<target name="test" depends="build">

@@ -47,6 +47,8 @@ public class MyApplet extends JApplet {
 
     private JTextField loadFilamentStatusJTextField = null;
     private JProgressBar printProgressJProgressBar = null;
+
+    private ResourceBundle resources = ResourceBundle.getBundle("ucrpf1host");
     
     /**
      * init the UI layout and connect the ActionListeners
@@ -91,7 +93,7 @@ public class MyApplet extends JApplet {
 	JPanel printingInfoPanel = new JPanel();
 	printingInfoPanel.setLayout(new BorderLayout());
 	
-	JButton backToMainButton = new JButton("Back to Main");
+	JButton backToMainButton = new JButton(resources.getString("Back_to_Main"));
 	backToMainButton.addActionListener(new BackToMainButtonActionListener());
 	printingInfoPanel.add(backToMainButton, BorderLayout.SOUTH);
 
@@ -111,7 +113,7 @@ public class MyApplet extends JApplet {
 	progressBarGC.anchor = GridBagConstraints.CENTER;
 	progressPanel.add(progressBar, progressBarGC);
 
-	JLabel progressLabel = new JLabel("Progress:");
+	JLabel progressLabel = new JLabel(resources.getString("Progress_COLON"));
 	GridBagConstraints progressLabelGC = new GridBagConstraints();
 	progressLabelGC.gridx = 1;
 	progressLabelGC.gridy = 2;
@@ -146,7 +148,7 @@ public class MyApplet extends JApplet {
 	}
 	//deviceComboBox.setEditable(true);
 	
-	JButton connectButton = new JButton("Connect");
+	JButton connectButton = new JButton(resources.getString("Connect"));
 	connectButton.addActionListener(new ConnectButtonActionListener(deviceComboBox));
 	
 	connectPanel.add(deviceComboBox);
@@ -165,16 +167,16 @@ public class MyApplet extends JApplet {
 	JPanel filamentPanel = new JPanel();
 	filamentPanel.setLayout(new BorderLayout());
 
-	JButton loadFilamentButton = new JButton("Load Filament");
+	JButton loadFilamentButton = new JButton(resources.getString("Load_Filament"));
 	loadFilamentButton.addActionListener(new LoadFilamentButtonActionListener());
 	
-	JButton unloadFilamentButton = new JButton("Unload Filament");
+	JButton unloadFilamentButton = new JButton(resources.getString("Unload_Filament"));
 	unloadFilamentButton.addActionListener(new UnloadFilamentButtonActionListener());
 
 	JPanel filamentPanelBox1 = new JPanel();
 	filamentPanelBox1.setLayout(new GridLayout(1,2));
 	
-	JButton backToMainButton = new JButton("Back to Main");
+	JButton backToMainButton = new JButton(resources.getString("Back_to_Main"));
 	backToMainButton.addActionListener(new BackToMainButtonActionListener());
 
 	filamentPanelBox1.add(loadFilamentButton);
@@ -195,9 +197,9 @@ public class MyApplet extends JApplet {
 	JPanel loadFilamentPanel = new JPanel();
 	loadFilamentPanel.setLayout(new BorderLayout());
 
-	JLabel label1 = new JLabel("Temperature: ");
+	JLabel label1 = new JLabel(resources.getString("Temperature_COLON"));
 	JTextField textField1 = new JTextField();
-	JLabel label2 = new JLabel("Status: ");
+	JLabel label2 = new JLabel(resources.getString("Status_COLON"));
 	JTextField textField2 = new JTextField();
 
 	this.loadFilamentStatusJTextField = textField2;
@@ -207,7 +209,7 @@ public class MyApplet extends JApplet {
 
 	
 	
-	JButton stopButton = new JButton("Stop Loading");
+	JButton stopButton = new JButton(resources.getString("Stop_Loading"));
 	stopButton.addActionListener(new StopLoadFilamentButtonActionListener());
 
 	loadFilamentPanelBox1.add(label1);
@@ -231,22 +233,22 @@ public class MyApplet extends JApplet {
 	JPanel mainPanel = new JPanel();
 	mainPanel.setLayout(new GridLayout(2,3));
 
-	JButton printButton = new JButton("Print");
+	JButton printButton = new JButton(resources.getString("Print"));
 	printButton.addActionListener(new PrintButtonActionListener());
 
-	JButton filamentButton = new JButton("Filament");
+	JButton filamentButton = new JButton(resources.getString("Filament"));
 	filamentButton.addActionListener(new FilamentButtonActionListener());
 
-	JButton preheatButton = new JButton("Preheat");
+	JButton preheatButton = new JButton(resources.getString("Preheat"));
 	preheatButton.addActionListener(new PreheatButtonActionListener());
 
-	JButton utilitiesButton = new JButton("Utilities");
+	JButton utilitiesButton = new JButton(resources.getString("Utilities"));
 	utilitiesButton.addActionListener(new UtilitiesButtonActionListener());
 
-	JButton settingsButton = new JButton("Settings");
+	JButton settingsButton = new JButton(resources.getString("Settings"));
 	settingsButton.addActionListener(new SettingsButtonActionListener());
 
-	JButton infoButton = new JButton("Info");
+	JButton infoButton = new JButton(resources.getString("Info"));
 	infoButton.addActionListener(new InfoButtonActionListener());
 	
 	mainPanel.add(printButton);

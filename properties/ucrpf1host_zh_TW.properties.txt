@@ -1,0 +1,17 @@
+Back_to_Main=退回主選單
+Connect=連接
+Filament=塑料
+Info=資訊
+Load_Filament=進料
+Preheat=預熱
+Print=列印
+Progress_COLON=進度:
+Progress=進度
+Settings=設定
+Status_COLON=狀態:
+Status=狀態
+Stop_Loading=停止
+Temperature_COLON=溫度:
+Temperature=溫度
+Unload_Filament=退料
+Utilities=工具
