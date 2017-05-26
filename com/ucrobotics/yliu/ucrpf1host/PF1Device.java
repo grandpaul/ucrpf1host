@@ -181,11 +181,15 @@ public class PF1Device {
 	pf1DeviceServer.sendCommand(gcode);
     }
 
-    public void close() {
+    public void close(long millis) {
 	if (pf1DeviceServer != null && pf1DeviceServerThread != null) {
 	    pf1DeviceServer.pleaseStop();
 	    try {
-		pf1DeviceServerThread.join();
+		if (millis<0) {
+		    pf1DeviceServerThread.join();
+		} else {
+		    pf1DeviceServerThread.join(millis);
+		}
 	    } catch (InterruptedException e) {
 	    }
 	    pf1DeviceServer = null;

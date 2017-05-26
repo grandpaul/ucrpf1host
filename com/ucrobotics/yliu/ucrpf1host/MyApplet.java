@@ -47,6 +47,7 @@ public class MyApplet extends JApplet {
 
     private JTextField loadFilamentStatusJTextField = null;
     private JProgressBar printProgressJProgressBar = null;
+    private JTextField loadFilamentTemperatureJTextField = null;
 
     private ResourceBundle resources = ResourceBundle.getBundle("ucrpf1host");
     
@@ -147,7 +148,6 @@ public class MyApplet extends JApplet {
 	for (String dev : devices) {
 	    deviceComboBox.addItem(dev);
 	}
-	//deviceComboBox.setEditable(true);
 	
 	JButton connectButton = new JButton(resources.getString("Connect"));
 	connectButton.addActionListener(new ConnectButtonActionListener(deviceComboBox));
@@ -203,12 +203,11 @@ public class MyApplet extends JApplet {
 	JLabel label2 = new JLabel(resources.getString("Status_COLON"));
 	JTextField textField2 = new JTextField();
 
+	this.loadFilamentTemperatureJTextField = textField1;
 	this.loadFilamentStatusJTextField = textField2;
 
 	JPanel loadFilamentPanelBox1 = new JPanel();
 	loadFilamentPanelBox1.setLayout(new GridLayout(2,2));
-
-	
 	
 	JButton stopButton = new JButton(resources.getString("Stop_Loading"));
 	stopButton.addActionListener(new StopLoadFilamentButtonActionListener());
@@ -219,6 +218,7 @@ public class MyApplet extends JApplet {
 	loadFilamentPanelBox1.add(textField2);
 	loadFilamentPanel.add(loadFilamentPanelBox1, BorderLayout.CENTER);
 	loadFilamentPanel.add(stopButton, BorderLayout.SOUTH);
+
 	return loadFilamentPanel;
     }
 
@@ -272,8 +272,36 @@ public class MyApplet extends JApplet {
     }
 
     public void stop() {
+	if (loadFilamentThread != null) {
+	    loadFilamentThread.pleaseStop();
+	    try {
+		loadFilamentThread.join(2000);
+	    } catch (InterruptedException e1) {
+		e1.printStackTrace();
+	    }
+	    loadFilamentThread = null;
+	}
+	if (unloadFilamentThread != null) {
+	    unloadFilamentThread.pleaseStop();
+	    try {
+		unloadFilamentThread.join(2000);
+	    } catch (InterruptedException e1) {
+		e1.printStackTrace();
+	    }
+	    unloadFilamentThread = null;
+	}
+	if (fileCommandSenderThread != null) {
+	    fileCommandSenderThread.pleaseStop();
+	    try {
+		fileCommandSenderThread.join(2000);
+	    } catch (InterruptedException e1) {
+		e1.printStackTrace();
+	    }
+	    fileCommandSenderThread = null;
+	    printProgressJProgressBar.setIndeterminate(true);
+	}
 	if (pf1Device != null) {
-	    pf1Device.close();
+	    pf1Device.close(5000);
 	    pf1Device = null;
 	}
 	super.stop();
@@ -290,8 +318,8 @@ public class MyApplet extends JApplet {
 		logger.info("You chose to open this file: " +
 			    chooser.getSelectedFile().getName());
 		fileCommandSenderThread = new FileCommandSender(pf1Device, chooser.getSelectedFile());
-		
-		fileCommandSenderThread.addProgressBar(printProgressJProgressBar);
+		fileCommandSenderThread.addPropertyChangeListener(new FileCommandSenderProgressChangeListener(printProgressJProgressBar));
+
 		fileCommandSenderThread.start();
 		goToCard("PrintingInfoPanel");
 	    }
@@ -426,7 +454,6 @@ public class MyApplet extends JApplet {
 	}
 	public void actionPerformed(ActionEvent e) {
 	    logger.info("Connect");
-	    goToCard("MainPanel");
 	    try {
 		pf1Device = new PF1Device((String)deviceComboBox.getSelectedItem());
 	    } catch (java.io.FileNotFoundException e1) {
@@ -438,7 +465,11 @@ public class MyApplet extends JApplet {
 	    } catch (gnu.io.UnsupportedCommOperationException e1) {
 		logger.info("Get UnsupportedCommOperationException when creating PF1Device");
 		pf1Device = null;
-	    }		
+	    }
+	    if (pf1Device != null) {
+		pf1Device.addPropertyChangeListener(new MyAppletPropertyChangeListener("extruderTemperature", loadFilamentTemperatureJTextField));
+		goToCard("MainPanel");
+	    }
 	}
     }
 
@@ -461,6 +492,36 @@ public class MyApplet extends JApplet {
 		}
 		if (this.jLabel != null) {
 		    this.jLabel.setText(evt.getNewValue().toString());
+		}
+	    }
+	}
+    }
+
+    class FileCommandSenderProgressChangeListener implements java.beans.PropertyChangeListener {
+	JProgressBar jProgressBar = null;
+	String property = "currentLine";
+	public FileCommandSenderProgressChangeListener(JProgressBar jProgressBar) {
+	    this.jProgressBar = jProgressBar;
+	    this.property = property;
+	}
+	public void propertyChange(java.beans.PropertyChangeEvent evt) {
+	    if (evt.getPropertyName().compareTo(this.property)==0) {
+		Object sourceO = evt.getSource();
+		FileCommandSender fcs = null;
+		if (sourceO instanceof FileCommandSender) {
+		    fcs = (FileCommandSender)sourceO;
+		}
+		if (fcs == null) {
+		    if (this.jProgressBar != null) {
+			this.jProgressBar.setIndeterminate(true);
+		    }
+		    return;
+		}
+		if (this.jProgressBar != null) {
+		    this.jProgressBar.setIndeterminate(false);
+		    this.jProgressBar.setMinimum(0);
+		    this.jProgressBar.setMaximum(fcs.getNumberOfLines());
+		    this.jProgressBar.setValue(fcs.getCurrentLine());
 		}
 	    }
 	}

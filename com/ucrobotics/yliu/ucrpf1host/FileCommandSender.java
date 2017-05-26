@@ -30,7 +30,6 @@ public class FileCommandSender extends Thread {
     private PF1Device pf1Device = null;
     private boolean runningFlag = true;
     private File gcodeFile = null;
-    private ArrayList<javax.swing.JProgressBar> progressBars = null;
     private int numberOfLines = 0;
     private int currentLine = 0;
     private java.beans.PropertyChangeSupport mPcs = new java.beans.PropertyChangeSupport(this);
@@ -41,7 +40,6 @@ public class FileCommandSender extends Thread {
 	this.pf1Device = pf1Device;
 	this.gcodeFile = gcodeFile;
 	this.runningFlag = true;
-	this.progressBars = new ArrayList<javax.swing.JProgressBar>();
 	this.numberOfLines = getLines(this.gcodeFile);
     }
 
@@ -83,21 +81,11 @@ public class FileCommandSender extends Thread {
 	return ret;
     }
 
-    public void addProgressBar(javax.swing.JProgressBar progressBar) {
-	this.progressBars.add(progressBar);
-    }
-
     public void run() {
 	currentLine = 0;
 
 	if (this.numberOfLines <= 0) {
 	    return;
-	}
-	for (javax.swing.JProgressBar progressBar : progressBars) {
-	    progressBar.setIndeterminate(false);
-	    progressBar.setMinimum(0);
-	    progressBar.setMaximum(this.numberOfLines);
-	    progressBar.setValue(0);
 	}
 
 	FileReader in = null;
@@ -115,9 +103,6 @@ public class FileCommandSender extends Thread {
 	    while ( (line = br.readLine()) != null) {
 		if (!runningFlag) {
 		    break;
-		}
-		for (javax.swing.JProgressBar progressBar : progressBars) {
-		    progressBar.setValue(currentLine);
 		}
 		int oldCurrentLine = currentLine;
 		currentLine = currentLine + 1;
