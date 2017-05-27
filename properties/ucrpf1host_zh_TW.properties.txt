@@ -6,6 +6,7 @@ Info=資訊
 Lines_COLON=行數:
 Load_Filament=進料
 Preheat=預熱
+Preheat_Temperature=預設溫度
 Print=列印
 Progress_COLON=進度:
 Progress=進度

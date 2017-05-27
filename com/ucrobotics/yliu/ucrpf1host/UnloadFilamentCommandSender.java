@@ -73,14 +73,14 @@ public class UnloadFilamentCommandSender extends Thread {
 	if (!runningFlag) {
 	    return;
 	}
-	pf1Device.sendCommand("M104 S215");
+	pf1Device.sendCommand(String.format("M104 S%1$d", Math.round(GlobalSettings.getInstance().getExtruderPreheatTemperature())));
 	if (!runningFlag) {
 	    return;
 	}
-	pf1Device.sendCommand("M109 S215");
+	pf1Device.sendCommand(String.format("M109 S%1$d", Math.round(GlobalSettings.getInstance().getExtruderPreheatTemperature())));
 	while (runningFlag) {
 	    double t1 = pf1Device.getExtruderTemperature();
-	    if (t1 >= 214.75) {
+	    if (t1 + 0.5 >= GlobalSettings.getInstance().getExtruderPreheatTemperature()) {
 		break;
 	    }
 	    try {

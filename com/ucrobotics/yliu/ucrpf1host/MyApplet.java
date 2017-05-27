@@ -83,6 +83,8 @@ public class MyApplet extends JApplet {
 
 	cards.add(createLoadFilamentPanel(), "LoadFilamentPanel");
 	
+	cards.add(createSettingsPanel(), "SettingsPanel");
+	
 	/* default card */
 	goToCard("ConnectPanel");
     }
@@ -301,6 +303,55 @@ public class MyApplet extends JApplet {
 	return loadFilamentPanel;
     }
 
+    /**
+     * Create "SettingsPanel".
+     * This function should be only called once in 
+     * init().
+     *
+     * @return: a JPanel for "SettingsPanel"
+     */
+    private JPanel createSettingsPanel() {
+	JPanel settingsPanel = new JPanel();
+	settingsPanel.setLayout(new BorderLayout());
+	
+	JButton backToMainButton = new JButton(resources.getString("Back_to_Main"));
+	backToMainButton.addActionListener(new BackToMainButtonActionListener());
+	settingsPanel.add(backToMainButton, BorderLayout.SOUTH);
+
+	JPanel centerPanel = new JPanel();
+
+	centerPanel.setLayout(new GridBagLayout());
+
+	JLabel preheatTemperatureLabel = new JLabel(resources.getString("Preheat_Temperature"));
+	GridBagConstraints preheatTemperatureLabelGC = new GridBagConstraints();
+	preheatTemperatureLabelGC.gridx = 1;
+	preheatTemperatureLabelGC.gridy = 1;
+	preheatTemperatureLabelGC.gridwidth = 1;
+	preheatTemperatureLabelGC.gridheight = 1;
+	preheatTemperatureLabelGC.weightx = 1;
+	preheatTemperatureLabelGC.weighty = 0;
+	preheatTemperatureLabelGC.fill = GridBagConstraints.NONE;
+	preheatTemperatureLabelGC.anchor = GridBagConstraints.EAST;
+	centerPanel.add(preheatTemperatureLabel, preheatTemperatureLabelGC);
+
+	JSpinner preheatTemperature = new JSpinner (new SpinnerNumberModel(new Integer((int)Math.round(GlobalSettings.getInstance().getExtruderPreheatTemperature())), new Integer(100), new Integer(260), new Integer(1)));
+	GridBagConstraints preheatTemperatureGC = new GridBagConstraints();
+	preheatTemperatureGC.gridx = 2;
+	preheatTemperatureGC.gridy = 1;
+	preheatTemperatureGC.gridwidth = 3;
+	preheatTemperatureGC.gridheight = 1;
+	preheatTemperatureGC.weightx = 1;
+	preheatTemperatureGC.weighty = 0;
+	preheatTemperatureGC.fill = GridBagConstraints.BOTH;
+	preheatTemperatureGC.anchor = GridBagConstraints.WEST;
+	centerPanel.add(preheatTemperature, preheatTemperatureGC);
+	preheatTemperature.addChangeListener(new SettingsExtruderPreheatTemperatureChangeListener());
+
+	settingsPanel.add(centerPanel, BorderLayout.CENTER);
+	return settingsPanel;
+    }
+
+    
     
     /**
      * Create "MainPanel".
@@ -444,6 +495,7 @@ public class MyApplet extends JApplet {
     class SettingsButtonActionListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 	    logger.info("Settings");
+	    goToCard("SettingsPanel");
 	}
     }
 
@@ -641,4 +693,16 @@ public class MyApplet extends JApplet {
 	    }
 	}
     }
+
+    class SettingsExtruderPreheatTemperatureChangeListener implements javax.swing.event.ChangeListener {
+	public void stateChanged(ChangeEvent e) {
+	    Object sourceO = e.getSource();
+	    if (sourceO instanceof JSpinner) {
+		JSpinner jsp1 = (JSpinner)sourceO;
+		int temp1 = Integer.parseInt( jsp1.getValue().toString() );
+		GlobalSettings.getInstance().setExtruderPreheatTemperature((double)temp1);
+	    }
+	}
+    }
+
 }
