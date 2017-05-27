@@ -169,6 +169,9 @@ public class PF1Device {
     public void addPropertyChangeListener(java.beans.PropertyChangeListener listener) {
 	mPcs.addPropertyChangeListener(listener);
     }
+    public void addPropertyChangeListener(String propertyName, java.beans.PropertyChangeListener listener) {
+	mPcs.addPropertyChangeListener(propertyName, listener);
+    }
     public void removePropertyChangeListener(java.beans.PropertyChangeListener listener) {
 	mPcs.removePropertyChangeListener(listener);
     }

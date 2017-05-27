@@ -33,6 +33,7 @@ public class FileCommandSender extends Thread {
     private int numberOfLines = 0;
     private int currentLine = 0;
     private java.beans.PropertyChangeSupport mPcs = new java.beans.PropertyChangeSupport(this);
+    private java.time.LocalDateTime startTime = null;
     
 
     public FileCommandSender(PF1Device pf1Device, File gcodeFile) {
@@ -41,6 +42,7 @@ public class FileCommandSender extends Thread {
 	this.gcodeFile = gcodeFile;
 	this.runningFlag = true;
 	this.numberOfLines = getLines(this.gcodeFile);
+	this.startTime = java.time.LocalDateTime.now();
     }
 
     public void pleaseStop() {
@@ -53,6 +55,10 @@ public class FileCommandSender extends Thread {
 
     public int getCurrentLine() {
 	return currentLine;
+    }
+
+    public java.time.LocalDateTime getStartTime() {
+	return startTime;
     }
 
     /** 
@@ -116,6 +122,9 @@ public class FileCommandSender extends Thread {
     
     public void addPropertyChangeListener(java.beans.PropertyChangeListener listener) {
 	mPcs.addPropertyChangeListener(listener);
+    }
+    public void addPropertyChangeListener(String propertyName, java.beans.PropertyChangeListener listener) {
+	mPcs.addPropertyChangeListener(propertyName, listener);
     }
     public void removePropertyChangeListener(java.beans.PropertyChangeListener listener) {
 	mPcs.removePropertyChangeListener(listener);

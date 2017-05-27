@@ -1,7 +1,9 @@
 Back_to_Main=退回主選單
 Connect=連接
+Estimate_Time_COLON=預測結束時間:
 Filament=塑料
 Info=資訊
+Lines_COLON=行數:
 Load_Filament=進料
 Preheat=預熱
 Print=列印

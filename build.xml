@@ -49,6 +49,7 @@
 	       excludes="ucrpf1host.jar">
 	    <fileset dir="${build.dir}"/>
 	    <fileset dir="properties"/>
+	    <fileset dir="${src.dir}" includes="images/*"/>
 	    <manifest>
 	      <attribute name="Manifest-Version" value="1.0" />
 	      <attribute name="Main-Class" value="com.ucrobotics.yliu.ucrpf1host.Main" />

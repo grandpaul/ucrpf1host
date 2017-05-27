@@ -47,6 +47,9 @@ public class MyApplet extends JApplet {
 
     private JTextField loadFilamentStatusJTextField = null;
     private JProgressBar printProgressJProgressBar = null;
+    private JLabel printProgressCurrentLineJLabel = null;
+    private JLabel printProgressTotalLineJLabel = null;
+    private JLabel printProgressEstimateTimeJLabel = null;
     private JTextField loadFilamentTemperatureJTextField = null;
 
     private ResourceBundle resources = ResourceBundle.getBundle("ucrpf1host");
@@ -105,28 +108,104 @@ public class MyApplet extends JApplet {
 	this.printProgressJProgressBar = progressBar;
 	GridBagConstraints progressBarGC = new GridBagConstraints();
 	progressBar.setIndeterminate(true);
+	progressBar.setStringPainted(true);
 	progressBarGC.gridx = 2;
-	progressBarGC.gridy = 2;
-	progressBarGC.gridwidth = 1;
+	progressBarGC.gridy = 1;
+	progressBarGC.gridwidth = 3;
 	progressBarGC.gridheight = 1;
-	progressBarGC.weightx = 0;
+	progressBarGC.weightx = 1;
 	progressBarGC.weighty = 0;
 	progressBarGC.fill = GridBagConstraints.BOTH;
-	progressBarGC.anchor = GridBagConstraints.CENTER;
+	progressBarGC.anchor = GridBagConstraints.WEST;
 	progressPanel.add(progressBar, progressBarGC);
 
 	JLabel progressLabel = new JLabel(resources.getString("Progress_COLON"));
 	GridBagConstraints progressLabelGC = new GridBagConstraints();
 	progressLabelGC.gridx = 1;
-	progressLabelGC.gridy = 2;
+	progressLabelGC.gridy = 1;
 	progressLabelGC.gridwidth = 1;
 	progressLabelGC.gridheight = 1;
-	progressLabelGC.weightx = 0;
+	progressLabelGC.weightx = 1;
 	progressLabelGC.weighty = 0;
-	progressLabelGC.fill = GridBagConstraints.BOTH;
-	progressLabelGC.anchor = GridBagConstraints.CENTER;
+	progressLabelGC.fill = GridBagConstraints.NONE;
+	progressLabelGC.anchor = GridBagConstraints.EAST;
 	progressPanel.add(progressLabel, progressLabelGC);
+
+	JLabel linesLabel = new JLabel(resources.getString("Lines_COLON"));
+	GridBagConstraints linesLabelGC = new GridBagConstraints();
+	linesLabelGC.gridx = 1;
+	linesLabelGC.gridy = 2;
+	linesLabelGC.gridwidth = 1;
+	linesLabelGC.gridheight = 1;
+	linesLabelGC.weightx = 1;
+	linesLabelGC.weighty = 0;
+	linesLabelGC.fill = GridBagConstraints.NONE;
+	linesLabelGC.anchor = GridBagConstraints.EAST;
+	progressPanel.add(linesLabel, linesLabelGC);
 	
+	JLabel currentLineLabel = new JLabel();
+	GridBagConstraints currentLineLabelGC = new GridBagConstraints();
+	currentLineLabelGC.gridx = 2;
+	currentLineLabelGC.gridy = 2;
+	currentLineLabelGC.gridwidth = 1;
+	currentLineLabelGC.gridheight = 1;
+	currentLineLabelGC.weightx = 1;
+	currentLineLabelGC.weighty = 0;
+	currentLineLabelGC.fill = GridBagConstraints.NONE;
+	currentLineLabelGC.anchor = GridBagConstraints.CENTER;
+	progressPanel.add(currentLineLabel, currentLineLabelGC);
+	this.printProgressCurrentLineJLabel = currentLineLabel;
+
+	JLabel slashLabel1 = new JLabel("/");
+	GridBagConstraints slashLabel1GC = new GridBagConstraints();
+	slashLabel1GC.gridx = 3;
+	slashLabel1GC.gridy = 2;
+	slashLabel1GC.gridwidth = 1;
+	slashLabel1GC.gridheight = 1;
+	slashLabel1GC.weightx = 1;
+	slashLabel1GC.weighty = 0;
+	slashLabel1GC.fill = GridBagConstraints.NONE;
+	slashLabel1GC.anchor = GridBagConstraints.CENTER;
+	progressPanel.add(slashLabel1, slashLabel1GC);
+
+	JLabel totalLineLabel = new JLabel();
+	GridBagConstraints totalLineLabelGC = new GridBagConstraints();
+	totalLineLabelGC.gridx = 4;
+	totalLineLabelGC.gridy = 2;
+	totalLineLabelGC.gridwidth = 1;
+	totalLineLabelGC.gridheight = 1;
+	totalLineLabelGC.weightx = 1;
+	totalLineLabelGC.weighty = 0;
+	totalLineLabelGC.fill = GridBagConstraints.NONE;
+	totalLineLabelGC.anchor = GridBagConstraints.CENTER;
+	progressPanel.add(totalLineLabel, totalLineLabelGC);
+	this.printProgressTotalLineJLabel = totalLineLabel;
+	
+	JLabel estimateTimeHeadLabel = new JLabel(resources.getString("Estimate_Time_COLON"));
+	GridBagConstraints estimateTimeHeadLabelGC = new GridBagConstraints();
+	estimateTimeHeadLabelGC.gridx = 1;
+	estimateTimeHeadLabelGC.gridy = 3;
+	estimateTimeHeadLabelGC.gridwidth = 1;
+	estimateTimeHeadLabelGC.gridheight = 1;
+	estimateTimeHeadLabelGC.weightx = 1;
+	estimateTimeHeadLabelGC.weighty = 0;
+	estimateTimeHeadLabelGC.fill = GridBagConstraints.NONE;
+	estimateTimeHeadLabelGC.anchor = GridBagConstraints.EAST;
+	progressPanel.add(estimateTimeHeadLabel, estimateTimeHeadLabelGC);
+	
+	JLabel estimateTimeLabel = new JLabel();
+	GridBagConstraints estimateTimeLabelGC = new GridBagConstraints();
+	estimateTimeLabelGC.gridx = 2;
+	estimateTimeLabelGC.gridy = 3;
+	estimateTimeLabelGC.gridwidth = 3;
+	estimateTimeLabelGC.gridheight = 1;
+	estimateTimeLabelGC.weightx = 1;
+	estimateTimeLabelGC.weighty = 0;
+	estimateTimeLabelGC.fill = GridBagConstraints.NONE;
+	estimateTimeLabelGC.anchor = GridBagConstraints.CENTER;
+	progressPanel.add(estimateTimeLabel, estimateTimeLabelGC);
+	this.printProgressEstimateTimeJLabel = estimateTimeLabel;
+
 	printingInfoPanel.add(progressPanel, BorderLayout.CENTER);
 	
 	return printingInfoPanel;
@@ -234,22 +313,22 @@ public class MyApplet extends JApplet {
 	JPanel mainPanel = new JPanel();
 	mainPanel.setLayout(new GridLayout(2,3));
 
-	JButton printButton = new JButton(resources.getString("Print"));
+	JButton printButton = new JButton(resources.getString("Print"), loadIcon("/images/print.png", 70));
 	printButton.addActionListener(new PrintButtonActionListener());
 
-	JButton filamentButton = new JButton(resources.getString("Filament"));
+	JButton filamentButton = new JButton(resources.getString("Filament"), loadIcon("/images/filament.png", 70));
 	filamentButton.addActionListener(new FilamentButtonActionListener());
 
-	JButton preheatButton = new JButton(resources.getString("Preheat"));
+	JButton preheatButton = new JButton(resources.getString("Preheat"), loadIcon("/images/preheat.png", 70));
 	preheatButton.addActionListener(new PreheatButtonActionListener());
 
-	JButton utilitiesButton = new JButton(resources.getString("Utilities"));
+	JButton utilitiesButton = new JButton(resources.getString("Utilities"), loadIcon("/images/utilities.png", 70));
 	utilitiesButton.addActionListener(new UtilitiesButtonActionListener());
 
-	JButton settingsButton = new JButton(resources.getString("Settings"));
+	JButton settingsButton = new JButton(resources.getString("Settings"), loadIcon("/images/settings.png", 70));
 	settingsButton.addActionListener(new SettingsButtonActionListener());
 
-	JButton infoButton = new JButton(resources.getString("Info"));
+	JButton infoButton = new JButton(resources.getString("Info"), loadIcon("/images/info.png", 70));
 	infoButton.addActionListener(new InfoButtonActionListener());
 	
 	mainPanel.add(printButton);
@@ -269,6 +348,23 @@ public class MyApplet extends JApplet {
      */
     public void goToCard(String name) {
 	((CardLayout)cards.getLayout()).show(cards, name);
+    }
+
+    private ImageIcon loadIcon(String fileName, int iconSize){
+	ImageIcon ret = null;
+	ImageIcon orig = null;
+	orig = new javax.swing.ImageIcon(getClass().getResource(fileName));
+	if (orig != null) {
+	    Image im = orig.getImage();
+	    Image imScaled = null;
+	    if (im.getWidth(null) > im.getHeight(null)) {
+		imScaled = im.getScaledInstance(iconSize,-1,Image.SCALE_SMOOTH);
+	    } else {
+		imScaled = im.getScaledInstance(-1,iconSize,Image.SCALE_SMOOTH);
+	    }
+	    ret = new javax.swing.ImageIcon(imScaled);
+	}
+	return ret;
     }
 
     public void stop() {
@@ -318,7 +414,7 @@ public class MyApplet extends JApplet {
 		logger.info("You chose to open this file: " +
 			    chooser.getSelectedFile().getName());
 		fileCommandSenderThread = new FileCommandSender(pf1Device, chooser.getSelectedFile());
-		fileCommandSenderThread.addPropertyChangeListener(new FileCommandSenderProgressChangeListener(printProgressJProgressBar));
+		fileCommandSenderThread.addPropertyChangeListener("currentLine", new FileCommandSenderProgressChangeListener(printProgressJProgressBar, printProgressCurrentLineJLabel, printProgressTotalLineJLabel, printProgressEstimateTimeJLabel));
 
 		fileCommandSenderThread.start();
 		goToCard("PrintingInfoPanel");
@@ -361,7 +457,7 @@ public class MyApplet extends JApplet {
 	public void actionPerformed(ActionEvent e) {
 	    logger.info("Load Filamente");
 	    loadFilamentThread = new LoadFilamentCommandSender(pf1Device);
-	    loadFilamentThread.addPropertyChangeListener(new MyAppletPropertyChangeListener("status", loadFilamentStatusJTextField));
+	    loadFilamentThread.addPropertyChangeListener("status", new MyAppletPropertyChangeListener(loadFilamentStatusJTextField));
 	    loadFilamentThread.start();
 	    goToCard("LoadFilamentPanel");
 	}
@@ -371,7 +467,7 @@ public class MyApplet extends JApplet {
 	public void actionPerformed(ActionEvent e) {
 	    logger.info("Unload Filamente");
 	    unloadFilamentThread = new UnloadFilamentCommandSender(pf1Device);
-	    unloadFilamentThread.addPropertyChangeListener(new MyAppletPropertyChangeListener("status", loadFilamentStatusJTextField));
+	    unloadFilamentThread.addPropertyChangeListener("status", new MyAppletPropertyChangeListener(loadFilamentStatusJTextField));
 	    unloadFilamentThread.start();
 	    goToCard("LoadFilamentPanel");
 	}
@@ -467,7 +563,7 @@ public class MyApplet extends JApplet {
 		pf1Device = null;
 	    }
 	    if (pf1Device != null) {
-		pf1Device.addPropertyChangeListener(new MyAppletPropertyChangeListener("extruderTemperature", loadFilamentTemperatureJTextField));
+		pf1Device.addPropertyChangeListener("extruderTemperature", new MyAppletPropertyChangeListener(loadFilamentTemperatureJTextField));
 		goToCard("MainPanel");
 	    }
 	}
@@ -476,52 +572,71 @@ public class MyApplet extends JApplet {
     class MyAppletPropertyChangeListener implements java.beans.PropertyChangeListener {
 	private javax.swing.text.JTextComponent jTextComponent = null;
 	private JLabel jLabel = null;
-	private String property = null;
-	public MyAppletPropertyChangeListener(String property, javax.swing.text.JTextComponent jTextComponent) {
-	    this.property = property;
+	public MyAppletPropertyChangeListener(javax.swing.text.JTextComponent jTextComponent) {
 	    this.jTextComponent = jTextComponent;
 	}
-	public MyAppletPropertyChangeListener(String property, JLabel jLabel) {
-	    this.property = property;
+	public MyAppletPropertyChangeListener(JLabel jLabel) {
 	    this.jLabel = jLabel;
 	}
 	public void propertyChange(java.beans.PropertyChangeEvent evt) {
-	    if (evt.getPropertyName().compareTo(this.property)==0) {
-		if (this.jTextComponent != null) {
-		    this.jTextComponent.setText(evt.getNewValue().toString());
-		}
-		if (this.jLabel != null) {
-		    this.jLabel.setText(evt.getNewValue().toString());
-		}
+	    if (this.jTextComponent != null) {
+		this.jTextComponent.setText(evt.getNewValue().toString());
+	    }
+	    if (this.jLabel != null) {
+		this.jLabel.setText(evt.getNewValue().toString());
 	    }
 	}
     }
 
     class FileCommandSenderProgressChangeListener implements java.beans.PropertyChangeListener {
 	JProgressBar jProgressBar = null;
-	String property = "currentLine";
-	public FileCommandSenderProgressChangeListener(JProgressBar jProgressBar) {
+	JLabel jCurrentLine = null;
+	JLabel jTotalLine = null;
+	JLabel jEstimateTime = null;
+	public FileCommandSenderProgressChangeListener(JProgressBar jProgressBar, JLabel jCurrentLine, JLabel jTotalLine, JLabel jEstimateTime) {
 	    this.jProgressBar = jProgressBar;
-	    this.property = property;
+	    this.jCurrentLine = jCurrentLine;
+	    this.jTotalLine = jTotalLine;
+	    this.jEstimateTime = jEstimateTime;
 	}
 	public void propertyChange(java.beans.PropertyChangeEvent evt) {
-	    if (evt.getPropertyName().compareTo(this.property)==0) {
-		Object sourceO = evt.getSource();
-		FileCommandSender fcs = null;
-		if (sourceO instanceof FileCommandSender) {
-		    fcs = (FileCommandSender)sourceO;
-		}
-		if (fcs == null) {
-		    if (this.jProgressBar != null) {
-			this.jProgressBar.setIndeterminate(true);
-		    }
-		    return;
-		}
+	    Object sourceO = evt.getSource();
+	    FileCommandSender fcs = null;
+	    if (sourceO instanceof FileCommandSender) {
+		fcs = (FileCommandSender)sourceO;
+	    }
+	    if (fcs == null) {
 		if (this.jProgressBar != null) {
-		    this.jProgressBar.setIndeterminate(false);
-		    this.jProgressBar.setMinimum(0);
-		    this.jProgressBar.setMaximum(fcs.getNumberOfLines());
-		    this.jProgressBar.setValue(fcs.getCurrentLine());
+		    this.jProgressBar.setIndeterminate(true);
+		}
+		return;
+	    }
+	    if (this.jProgressBar != null) {
+		this.jProgressBar.setIndeterminate(false);
+		this.jProgressBar.setMinimum(0);
+		this.jProgressBar.setMaximum(fcs.getNumberOfLines());
+		this.jProgressBar.setValue(fcs.getCurrentLine());
+	    }
+	    if (this.jCurrentLine != null) {
+		this.jCurrentLine.setText(String.format("%1$d", fcs.getCurrentLine()));
+	    }
+	    if (this.jTotalLine != null) {
+		this.jTotalLine.setText(String.format("%1$d", fcs.getNumberOfLines()));
+	    }
+	    java.time.LocalDateTime startTime = fcs.getStartTime();
+	    if (startTime != null && fcs.getNumberOfLines() > 0 && fcs.getCurrentLine() > 0) {
+		java.time.LocalDateTime currentTime = java.time.LocalDateTime.now();
+		long diffInSeconds = java.time.Duration.between(startTime, currentTime).getSeconds();
+		logger.finest(String.format("diffInSeconds: %1$d", diffInSeconds));
+
+		long estimatedSeconds = diffInSeconds * fcs.getNumberOfLines() / fcs.getCurrentLine();
+		logger.finest(String.format("estimatedSeconds: %1$d", estimatedSeconds));
+		java.time.LocalDateTime estimatedTime = startTime.plusSeconds(estimatedSeconds);
+		logger.finest(String.format("estimatedTime: %1$s", estimatedTime.toString()));
+		java.time.Duration estimatedDuration = java.time.Duration.between(startTime, estimatedTime);
+		if (this.jEstimateTime != null) {
+		    String t1 = estimatedTime.format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+		    this.jEstimateTime.setText(t1);
 		}
 	    }
 	}
