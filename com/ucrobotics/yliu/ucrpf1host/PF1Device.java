@@ -105,7 +105,6 @@ public class PF1Device {
 	while (ports.hasMoreElements()) {
 	    CommPortIdentifier port = (CommPortIdentifier) ports.nextElement();
 	    java.util.logging.Logger.getLogger(PF1Device.loggerName).info(String.format("Found device name: %1$s", port.getName()));
-	    ret.add(port.getName());
 	    if (port.getPortType() != CommPortIdentifier.PORT_SERIAL) {
 		java.util.logging.Logger.getLogger(PF1Device.loggerName).info(String.format("Device: %1$s is not a serial port", port.getName()));
 		continue;
