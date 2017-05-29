@@ -502,6 +502,8 @@ public class MyApplet extends JApplet {
 	gCodeTextButtonGC.fill = GridBagConstraints.BOTH;
 	gCodeTextButtonGC.anchor = GridBagConstraints.EAST;
 	centerPanel.add(gCodeTextButton, gCodeTextButtonGC);
+	gCodeTextButton.addActionListener(new UtilitiesGCodeSendButtonActionListener(gCodeTextField));
+	
 
 	utilitiesPanel.add(centerPanel, BorderLayout.CENTER);
 	return utilitiesPanel;
@@ -962,7 +964,20 @@ public class MyApplet extends JApplet {
 		}
 		int z2 = (int) Math.round(z1*((double)jSlider.getMaximum()));
 		if (z2 != jSlider.getValue()) {
+		    ChangeListener[] listeners = jSlider.getChangeListeners();
+		    for (int i1=0; i1<listeners.length; i1++) {
+			if (listeners[i1] instanceof ExtruderHeightPanelChangeListener) {
+			    ExtruderHeightPanelChangeListener lis1 = (ExtruderHeightPanelChangeListener)  listeners[i1];
+			    lis1.setActive(false);
+			}
+		    }
 		    jSlider.setValue(z2);
+		    for (int i1=0; i1<listeners.length; i1++) {
+			if (listeners[i1] instanceof ExtruderHeightPanelChangeListener) {
+			    ExtruderHeightPanelChangeListener lis1 = (ExtruderHeightPanelChangeListener)  listeners[i1];
+			    lis1.setActive(true);
+			}
+		    }
 		}
 	    }
 	}
@@ -970,7 +985,17 @@ public class MyApplet extends JApplet {
 
     class ExtruderHeightPanelChangeListener implements ChangeListener {
 	private boolean valueChanged=false;
+	private boolean active=true;
+	public void setActive(boolean active) {
+	    this.active = active;
+	}
+	public boolean getActive() {
+	    return this.active;
+	}
 	public void stateChanged(ChangeEvent e) {
+	    if (!active) {
+		return;
+	    }
 	    Object o1 = e.getSource();
 	    JSlider jSlider = null;
 	    if (o1 instanceof JSlider) {
@@ -988,7 +1013,7 @@ public class MyApplet extends JApplet {
 		    }
 		    if (pf1Device != null) {
 			if (valueChanged) {
-			    pf1Device.sendCommand(String.format("G1 Z%1$.2f F3000", h1*GlobalSettings.getInstance().getMaxZ()));
+			    pf1Device.sendCommand(String.format("G1 Z%1$.5f F3000", h1*GlobalSettings.getInstance().getMaxZ()));
 			}
 		    }
 		    valueChanged=false;
@@ -999,4 +1024,19 @@ public class MyApplet extends JApplet {
 	    }
 	}
     }
+
+    class UtilitiesGCodeSendButtonActionListener implements ActionListener {
+	private JTextField jTextField=null;
+	public UtilitiesGCodeSendButtonActionListener(JTextField jTextField) {
+	    this.jTextField = jTextField;
+	}
+	public void actionPerformed(ActionEvent e) {
+	    logger.info(String.format("Utilities -> Send Button pressed. Cmd=%1$s",jTextField.getText()));
+	    if (pf1Device != null) {
+		pf1Device.sendCommand(jTextField.getText());
+	    }
+	    jTextField.setText("");
+	}
+    }
+
 }
