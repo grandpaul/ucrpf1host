@@ -51,6 +51,7 @@ public class MyApplet extends JApplet {
     private JLabel printProgressTotalLineJLabel = null;
     private JLabel printProgressEstimateTimeJLabel = null;
     private JTextField loadFilamentTemperatureJTextField = null;
+    private JTextField infoTemperatureJTextField = null;
 
     private ResourceBundle resources = ResourceBundle.getBundle("ucrpf1host");
     
@@ -85,6 +86,8 @@ public class MyApplet extends JApplet {
 	
 	cards.add(createSettingsPanel(), "SettingsPanel");
 	
+	cards.add(createInfoPanel(), "InfoPanel");
+
 	/* default card */
 	goToCard("ConnectPanel");
     }
@@ -351,7 +354,42 @@ public class MyApplet extends JApplet {
 	return settingsPanel;
     }
 
-    
+    /**
+     * Create "InfoPanel".
+     * This function should be only called once in 
+     * init().
+     *
+     * @return: a JPanel for "InfoPanel"
+     */
+    private JPanel createInfoPanel() {
+	JPanel infoPanel = new JPanel();
+	infoPanel.setLayout(new BorderLayout());
+	
+	JButton backToMainButton = new JButton(resources.getString("Back_to_Main"));
+	backToMainButton.addActionListener(new BackToMainButtonActionListener());
+	infoPanel.add(backToMainButton, BorderLayout.SOUTH);
+
+
+	JPanel centerPanel = new JPanel();
+	centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
+
+	JScrollPane centerPanelScroll = new JScrollPane(centerPanel);
+
+	JPanel panel1 = new JPanel();
+	panel1.setLayout(new GridLayout(1,2));
+	
+	JLabel extruderTemperatureLabel = new JLabel(resources.getString("Temperature_COLON"));
+	panel1.add(extruderTemperatureLabel);
+	JTextField temperatureField = new JTextField();
+	panel1.add(temperatureField);
+	this.infoTemperatureJTextField = temperatureField;
+
+	centerPanel.add(panel1);
+
+	infoPanel.add(centerPanel, BorderLayout.CENTER);
+	return infoPanel;
+    }
+
     
     /**
      * Create "MainPanel".
@@ -370,8 +408,8 @@ public class MyApplet extends JApplet {
 	JButton filamentButton = new JButton(resources.getString("Filament"), loadIcon("/images/filament.png", 70));
 	filamentButton.addActionListener(new FilamentButtonActionListener());
 
-	JButton preheatButton = new JButton(resources.getString("Preheat"), loadIcon("/images/preheat.png", 70));
-	preheatButton.addActionListener(new PreheatButtonActionListener());
+	JToggleButton preheatButton = new JToggleButton(resources.getString("Preheat"), loadIcon("/images/preheat.png", 70));
+	preheatButton.addItemListener(new PreheatButtonActionListener());
 
 	JButton utilitiesButton = new JButton(resources.getString("Utilities"), loadIcon("/images/utilities.png", 70));
 	utilitiesButton.addActionListener(new UtilitiesButtonActionListener());
@@ -480,9 +518,22 @@ public class MyApplet extends JApplet {
 	}
     }
 
-    class PreheatButtonActionListener implements ActionListener {
+    class PreheatButtonActionListener implements ActionListener, ItemListener {
 	public void actionPerformed(ActionEvent e) {
 	    logger.info("Preheat");
+	}
+	public void itemStateChanged(java.awt.event.ItemEvent e1) {
+	    if (e1.getStateChange() == ItemEvent.SELECTED) {
+		logger.info("Preheat selected");
+		if (pf1Device != null) {
+		    pf1Device.sendCommand(String.format("M104 S%1$d", Math.round(GlobalSettings.getInstance().getExtruderPreheatTemperature())));
+		}
+	    } else if (e1.getStateChange() == ItemEvent.DESELECTED) {
+		logger.info("Preheat deselected");
+		if (pf1Device != null) {
+		    pf1Device.sendCommand("M104 S0");
+		}
+	    }
 	}
     }
 
@@ -502,6 +553,7 @@ public class MyApplet extends JApplet {
     class InfoButtonActionListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 	    logger.info("Info");
+	    goToCard("InfoPanel");
 	}
     }
 
@@ -616,6 +668,7 @@ public class MyApplet extends JApplet {
 	    }
 	    if (pf1Device != null) {
 		pf1Device.addPropertyChangeListener("extruderTemperature", new MyAppletPropertyChangeListener(loadFilamentTemperatureJTextField));
+		pf1Device.addPropertyChangeListener("extruderTemperature", new MyAppletPropertyChangeListener(infoTemperatureJTextField));
 		goToCard("MainPanel");
 	    }
 	}
