@@ -249,10 +249,10 @@ public class MyApplet extends JApplet {
 	JPanel filamentPanel = new JPanel();
 	filamentPanel.setLayout(new BorderLayout());
 
-	JButton loadFilamentButton = new JButton(resources.getString("Load_Filament"));
+	JButton loadFilamentButton = new JButton(resources.getString("Load_Filament"), loadIcon("/images/loadfilament.png", 200));
 	loadFilamentButton.addActionListener(new LoadFilamentButtonActionListener());
 	
-	JButton unloadFilamentButton = new JButton(resources.getString("Unload_Filament"));
+	JButton unloadFilamentButton = new JButton(resources.getString("Unload_Filament"), loadIcon("/images/unloadfilament.png", 200));
 	unloadFilamentButton.addActionListener(new UnloadFilamentButtonActionListener());
 
 	JPanel filamentPanelBox1 = new JPanel();
