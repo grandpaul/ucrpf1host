@@ -51,7 +51,7 @@ public class UnloadFilamentCommandSender extends Thread {
 	if (!runningFlag) {
 	    return;
 	}
-	pf1Device.sendCommand("G1 X50 F3600");
+	pf1Device.sendCommand(String.format("G1 X%1$.2f F3600", GlobalSettings.getInstance().getBedWidth()/2.0));
 	if (!runningFlag) {
 	    return;
 	}
@@ -59,7 +59,7 @@ public class UnloadFilamentCommandSender extends Thread {
 	if (!runningFlag) {
 	    return;
 	}
-	pf1Device.sendCommand("G1 Y50 F3600");
+	pf1Device.sendCommand(String.format("G1 Y%1$.2f F3600", GlobalSettings.getInstance().getBedHeight()/2.0));
 	if (!runningFlag) {
 	    return;
 	}
@@ -67,7 +67,7 @@ public class UnloadFilamentCommandSender extends Thread {
 	if (!runningFlag) {
 	    return;
 	}
-	pf1Device.sendCommand("G1 Z50 F3000");
+	pf1Device.sendCommand(String.format("G1 Z%1$.2f F3000", GlobalSettings.getInstance().getMaxZ()/2.0));
 	/* heating */
 	mPcs.firePropertyChange("status", "Homing", "Heating");
 	if (!runningFlag) {

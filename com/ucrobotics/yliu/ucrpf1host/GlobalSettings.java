@@ -19,6 +19,9 @@ package com.ucrobotics.yliu.ucrpf1host;
 
 public class GlobalSettings {
     private double extruderPreheatTemperature = 215.0;
+    private double bedWidth = 120;
+    private double bedHeight = 120;
+    private double maxZ = 120;
 
     private java.beans.PropertyChangeSupport mPcs = new java.beans.PropertyChangeSupport(this);
     private static GlobalSettings instance = null;
@@ -41,6 +44,39 @@ public class GlobalSettings {
 	this.extruderPreheatTemperature = extruderPreheatTemperature;
 	if (oldTemperature != extruderPreheatTemperature) {
 	    mPcs.firePropertyChange("extruderPreheatTemperature", new Double(oldTemperature), new Double(extruderPreheatTemperature));
+	}
+    }
+
+    public double getBedWidth() {
+	return bedWidth;
+    }
+    public void setBedWidth(double bedWidth) {
+	double oldBedWidth = this.bedWidth;
+	this.bedWidth = bedWidth;
+	if (oldBedWidth != bedWidth) {
+	    mPcs.firePropertyChange("bedWidth", new Double(oldBedWidth), new Double(bedWidth));
+	}
+    }
+
+    public double getBedHeight() {
+	return bedHeight;
+    }
+    public void setBedHeight(double bedHeight) {
+	double oldBedHeight = this.bedHeight;
+	this.bedHeight = bedHeight;
+	if (oldBedHeight != bedHeight) {
+	    mPcs.firePropertyChange("bedHeight", new Double(oldBedHeight), new Double(bedHeight));
+	}
+    }
+
+    public double getMaxZ() {
+	return maxZ;
+    }
+    public void setMaxZ(double maxZ) {
+	double oldMaxZ = this.maxZ;
+	this.maxZ = maxZ;
+	if (oldMaxZ != maxZ) {
+	    mPcs.firePropertyChange("maxZ", new Double(oldMaxZ), new Double(maxZ));
 	}
     }
 

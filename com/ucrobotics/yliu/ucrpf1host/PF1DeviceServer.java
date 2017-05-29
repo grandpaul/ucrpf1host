@@ -188,6 +188,7 @@ public class PF1DeviceServer implements Runnable {
 	while (historyQueue.size() >= 1500) {
 	    historyQueue.remove();
 	}
+	updateExtruderPosition(cmdData);
 	doResend(commandCounter-1);
     }
     
