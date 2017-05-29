@@ -79,19 +79,39 @@ public class ReceivedData {
     /**
      * Is the received message an temperature value?
      *
-     * @return: -1.0: not a resend. other number is the temperature
+     * @return: NaN: not a resend. other number is the temperature
      */
     public double getExtruderTemperature() {
 	Matcher m = temperaturePattern.matcher(data.trim());
 	if (m.matches()) {
-	    double ret = -1.0;
+	    double ret = Double.NaN;
 	    try {
 		ret = Double.parseDouble(m.group(1));
 	    } catch (java.lang.NumberFormatException e) {
-		ret = -1.0;
+		ret = Double.NaN;
 	    }
 	    return ret;
 	}
-	return -1.0;
+	return Double.NaN;
     }
+
+    /**
+     * Is the received message an temperature value?
+     *
+     * @return: NaN: not a resend. other number is the target temperature
+     */
+    public double getExtruderTargetTemperature() {
+	Matcher m = temperaturePattern.matcher(data.trim());
+	if (m.matches()) {
+	    double ret = Double.NaN;
+	    try {
+		ret = Double.parseDouble(m.group(2));
+	    } catch (java.lang.NumberFormatException e) {
+		ret = Double.NaN;
+	    }
+	    return ret;
+	}
+	return Double.NaN;
+    }
+    
 }

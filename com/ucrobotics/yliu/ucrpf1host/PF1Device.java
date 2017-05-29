@@ -36,6 +36,7 @@ public class PF1Device {
     private double extruderE = 0.0;
     private double extruderF = 0.0;
     private double extruderTemperature = 0.0;
+    private double extruderTargetTemperature = 0.0;
     private java.beans.PropertyChangeSupport mPcs = new java.beans.PropertyChangeSupport(this);
 
     /**
@@ -119,19 +120,31 @@ public class PF1Device {
 	return extruderX;
     }
     public void setExtruderX(double extruderX) {
+	double oldExtruderX = extruderX;
 	this.extruderX = extruderX;
+	if (oldExtruderX != extruderX) {
+	    mPcs.firePropertyChange("extruderX", new Double(oldExtruderX), new Double(extruderX));
+	}
     }
     public double getExtruderY() {
 	return extruderY;
     }
     public void setExtruderY(double extruderY) {
+	double oldExtruderY = this.extruderY;
 	this.extruderY = extruderY;
+	if (oldExtruderY != extruderY) {
+	    mPcs.firePropertyChange("extruderY", new Double(oldExtruderY), new Double(extruderY));
+	}
     }
     public double getExtruderZ() {
 	return extruderZ;
     }
     public void setExtruderZ(double extruderZ) {
+	double oldExtruderZ = this.extruderZ;
 	this.extruderZ = extruderZ;
+	if (oldExtruderZ != extruderZ) {
+	    mPcs.firePropertyChange("extruderZ", new Double(oldExtruderZ), new Double(extruderZ));
+	}
     }
     public double getExtruderE() {
 	return extruderE;
@@ -154,11 +167,21 @@ public class PF1Device {
 	}
     }
 
-    public void setExtruderTemperature(double t) {
+    public void setExtruderTemperature(double extruderTemperature) {
 	double oldTemperature = this.extruderTemperature;
-	this.extruderTemperature = t;
-	if (oldTemperature != t) {
-	    mPcs.firePropertyChange("extruderTemperature", new Double(oldTemperature), new Double(t));
+	this.extruderTemperature = extruderTemperature;
+	if (oldTemperature != extruderTemperature) {
+	    mPcs.firePropertyChange("extruderTemperature", new Double(oldTemperature), new Double(extruderTemperature));
+	}
+    }
+    public double getExtruderTargetTemperature() {
+	return extruderTargetTemperature;
+    }
+    public void setExtruderTargetTemperature(double extruderTargetTemperature) {
+	double oldTargetTemperature = this.extruderTargetTemperature;
+	this.extruderTargetTemperature = extruderTargetTemperature;
+	if (oldTargetTemperature != extruderTargetTemperature) {
+	    mPcs.firePropertyChange("extruderTargetTemperature", new Double(oldTargetTemperature), new Double(extruderTargetTemperature));
 	}
     }
     public double getExtruderTemperature() {

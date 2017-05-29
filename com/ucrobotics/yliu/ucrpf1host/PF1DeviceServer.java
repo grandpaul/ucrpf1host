@@ -280,9 +280,12 @@ public class PF1DeviceServer implements Runnable {
 	    
 	    if (rd != null) {
 		command.addAnswer(rd);
-		if (rd.getExtruderTemperature() != -1.0) {
+		if (!Double.isNaN(rd.getExtruderTemperature())) {
 		    pf1Device.setExtruderTemperature(rd.getExtruderTemperature());
 		}
+		if (!Double.isNaN(rd.getExtruderTargetTemperature())) {
+		    pf1Device.setExtruderTargetTemperature(rd.getExtruderTargetTemperature());
+		}		    
 		if (rd.isOK()) {
 		    return -1;
 		} else if (rd.getResend()>0) {
