@@ -120,8 +120,9 @@ public class PF1Device {
 	return extruderX;
     }
     public void setExtruderX(double extruderX) {
-	double oldExtruderX = extruderX;
+	double oldExtruderX = this.extruderX;
 	this.extruderX = extruderX;
+	java.util.logging.Logger.getLogger(PF1Device.loggerName).finer(String.format("ExtruderX: %1$f", extruderX));
 	if (oldExtruderX != extruderX) {
 	    mPcs.firePropertyChange("extruderX", new Double(oldExtruderX), new Double(extruderX));
 	}
@@ -132,6 +133,7 @@ public class PF1Device {
     public void setExtruderY(double extruderY) {
 	double oldExtruderY = this.extruderY;
 	this.extruderY = extruderY;
+	java.util.logging.Logger.getLogger(PF1Device.loggerName).finer(String.format("ExtruderY: %1$f", extruderY));
 	if (oldExtruderY != extruderY) {
 	    mPcs.firePropertyChange("extruderY", new Double(oldExtruderY), new Double(extruderY));
 	}

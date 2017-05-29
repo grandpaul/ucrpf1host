@@ -52,6 +52,8 @@ public class MyApplet extends JApplet {
     private JLabel printProgressEstimateTimeJLabel = null;
     private JTextField loadFilamentTemperatureJTextField = null;
     private JTextField infoTemperatureJTextField = null;
+    private PointPanel utilitiesExtruderPositionPanel = null;
+    private JSlider utilitiesExtruderHeightPanel = null;
 
     private ResourceBundle resources = ResourceBundle.getBundle("ucrpf1host");
     
@@ -87,6 +89,8 @@ public class MyApplet extends JApplet {
 	cards.add(createSettingsPanel(), "SettingsPanel");
 	
 	cards.add(createInfoPanel(), "InfoPanel");
+
+	cards.add(createUtilitiesPanel(), "UtilitiesPanel");
 
 	/* default card */
 	goToCard("ConnectPanel");
@@ -390,6 +394,119 @@ public class MyApplet extends JApplet {
 	return infoPanel;
     }
 
+    /**
+     * Create "UtilitiesPanel".
+     * This function should be only called once in 
+     * init().
+     *
+     * @return: a JPanel for "UtilitiesPanel"
+     */
+    private JPanel createUtilitiesPanel() {
+	JPanel utilitiesPanel = new JPanel();
+	utilitiesPanel.setLayout(new BorderLayout());
+	
+	JButton backToMainButton = new JButton(resources.getString("Back_to_Main"));
+	backToMainButton.addActionListener(new BackToMainButtonActionListener());
+	utilitiesPanel.add(backToMainButton, BorderLayout.SOUTH);
+
+
+	JPanel centerPanel = new JPanel();
+	centerPanel.setLayout(new GridBagLayout());
+
+	JLabel extruderPositionLabel = new JLabel(resources.getString("Extruder_Position"));
+	GridBagConstraints extruderPositionLabelGC = new GridBagConstraints();
+	extruderPositionLabelGC.gridx = 1;
+	extruderPositionLabelGC.gridy = 3;
+	extruderPositionLabelGC.gridwidth = 1;
+	extruderPositionLabelGC.gridheight = 1;
+	extruderPositionLabelGC.weightx = 1;
+	extruderPositionLabelGC.weighty = 0;
+	extruderPositionLabelGC.fill = GridBagConstraints.NONE;
+	extruderPositionLabelGC.anchor = GridBagConstraints.EAST;
+	centerPanel.add(extruderPositionLabel, extruderPositionLabelGC);
+
+	PointPanel extruderPositionPanel = new PointPanel();
+	extruderPositionPanel.setPreferredSize(new Dimension(100,100));
+	GridBagConstraints extruderPositionPanelGC = new GridBagConstraints();
+	extruderPositionPanelGC.gridx = 2;
+	extruderPositionPanelGC.gridy = 1;
+	extruderPositionPanelGC.gridwidth = 3;
+	extruderPositionPanelGC.gridheight = 3;
+	extruderPositionPanelGC.weightx = 0;
+	extruderPositionPanelGC.weighty = 0;
+	extruderPositionPanelGC.fill = GridBagConstraints.NONE;
+	extruderPositionPanelGC.anchor = GridBagConstraints.WEST;
+	extruderPositionPanel.addMouseListener(new ExtruderPositionPanelMouseListener());
+	centerPanel.add(extruderPositionPanel, extruderPositionPanelGC);
+	this.utilitiesExtruderPositionPanel = extruderPositionPanel;
+
+	JLabel extruderHeightLabel = new JLabel(resources.getString("Extruder_Height"));
+	GridBagConstraints extruderHeightLabelGC = new GridBagConstraints();
+	extruderHeightLabelGC.gridx = 7;
+	extruderHeightLabelGC.gridy = 3;
+	extruderHeightLabelGC.gridwidth = 1;
+	extruderHeightLabelGC.gridheight = 1;
+	extruderHeightLabelGC.weightx = 1;
+	extruderHeightLabelGC.weighty = 0;
+	extruderHeightLabelGC.fill = GridBagConstraints.NONE;
+	extruderHeightLabelGC.anchor = GridBagConstraints.EAST;
+	centerPanel.add(extruderHeightLabel, extruderHeightLabelGC);
+	
+	JSlider extruderHeightPanel = new JSlider(JSlider.VERTICAL,0,100000,0);
+	GridBagConstraints extruderHeightPanelGC = new GridBagConstraints();
+	extruderHeightPanelGC.gridx = 8;
+	extruderHeightPanelGC.gridy = 1;
+	extruderHeightPanelGC.gridwidth = 2;
+	extruderHeightPanelGC.gridheight = 3;
+	extruderHeightPanelGC.weightx = 0;
+	extruderHeightPanelGC.weighty = 0;
+	extruderHeightPanelGC.fill = GridBagConstraints.NONE;
+	extruderHeightPanelGC.anchor = GridBagConstraints.WEST;
+	extruderHeightPanel.addMouseListener(new ExtruderPositionPanelMouseListener());
+	extruderHeightPanel.addChangeListener(new ExtruderHeightPanelChangeListener());
+	centerPanel.add(extruderHeightPanel, extruderHeightPanelGC);
+	this.utilitiesExtruderHeightPanel = extruderHeightPanel;
+
+	JLabel gCodeLabel = new JLabel(resources.getString("GCode"));
+	GridBagConstraints gCodeLabelGC = new GridBagConstraints();
+	gCodeLabelGC.gridx = 1;
+	gCodeLabelGC.gridy = 4;
+	gCodeLabelGC.gridwidth = 1;
+	gCodeLabelGC.gridheight = 1;
+	gCodeLabelGC.weightx = 1;
+	gCodeLabelGC.weighty = 0;
+	gCodeLabelGC.fill = GridBagConstraints.NONE;
+	gCodeLabelGC.anchor = GridBagConstraints.EAST;
+	centerPanel.add(gCodeLabel, gCodeLabelGC);
+
+	JTextField gCodeTextField = new JTextField();
+	GridBagConstraints gCodeTextFieldGC = new GridBagConstraints();
+	gCodeTextFieldGC.gridx = 2;
+	gCodeTextFieldGC.gridy = 4;
+	gCodeTextFieldGC.gridwidth = 3;
+	gCodeTextFieldGC.gridheight = 1;
+	gCodeTextFieldGC.weightx = 1;
+	gCodeTextFieldGC.weighty = 0;
+	gCodeTextFieldGC.fill = GridBagConstraints.BOTH;
+	gCodeTextFieldGC.anchor = GridBagConstraints.EAST;
+	centerPanel.add(gCodeTextField, gCodeTextFieldGC);
+
+	JButton gCodeTextButton = new JButton(resources.getString("Send"));
+	GridBagConstraints gCodeTextButtonGC = new GridBagConstraints();
+	gCodeTextButtonGC.gridx = 5;
+	gCodeTextButtonGC.gridy = 4;
+	gCodeTextButtonGC.gridwidth = 1;
+	gCodeTextButtonGC.gridheight = 1;
+	gCodeTextButtonGC.weightx = 1;
+	gCodeTextButtonGC.weighty = 0;
+	gCodeTextButtonGC.fill = GridBagConstraints.BOTH;
+	gCodeTextButtonGC.anchor = GridBagConstraints.EAST;
+	centerPanel.add(gCodeTextButton, gCodeTextButtonGC);
+
+	utilitiesPanel.add(centerPanel, BorderLayout.CENTER);
+	return utilitiesPanel;
+    }
+
     
     /**
      * Create "MainPanel".
@@ -540,6 +657,7 @@ public class MyApplet extends JApplet {
     class UtilitiesButtonActionListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 	    logger.info("Utilities");
+	    goToCard("UtilitiesPanel");
 	}
     }
 
@@ -669,6 +787,7 @@ public class MyApplet extends JApplet {
 	    if (pf1Device != null) {
 		pf1Device.addPropertyChangeListener("extruderTemperature", new MyAppletPropertyChangeListener(loadFilamentTemperatureJTextField));
 		pf1Device.addPropertyChangeListener("extruderTemperature", new MyAppletPropertyChangeListener(infoTemperatureJTextField));
+		pf1Device.addPropertyChangeListener(new ExtruderPositionPanelUpdater(utilitiesExtruderPositionPanel, utilitiesExtruderHeightPanel));
 		goToCard("MainPanel");
 	    }
 	}
@@ -757,5 +876,127 @@ public class MyApplet extends JApplet {
 	    }
 	}
     }
+    
+    class ExtruderPositionPanelMouseListener implements MouseListener {
+	public void mouseClicked(MouseEvent e) {
+	    int mx = e.getX();
+	    int my = e.getY();
+	    Object jPanelO = e.getSource();
+	    PointPanel jPanel = null;
+	    if (jPanelO instanceof PointPanel) {
+		jPanel = (PointPanel)jPanelO;
+	    }
+	    if (jPanel == null) {
+		return;
+	    }
+	    if (e.getButton() == MouseEvent.BUTTON1) {
+		double x = ((double)mx)/((double)jPanel.getWidth());
+		double y = ((double)my)/((double)jPanel.getHeight());
+		if (x<=0.0) {
+		    x=0.0;
+		}
+		if (x>=1.0) {
+		    x=1.0;
+		}
+		if (y<=0.0) {
+		    y=0.0;
+		}
+		if (y>=1.0) {
+		    y=1.0;
+		}
+		y=1.0-y;
+		if (pf1Device != null) {
+		    pf1Device.sendCommand(String.format("G1 X%1$.2f Y%2$.2f F3600", x*GlobalSettings.getInstance().getBedWidth(), y*GlobalSettings.getInstance().getBedHeight()));
+		}
+	    }
+	}
+	public void mouseEntered(MouseEvent e) {
+	}
+	public void mouseExited(MouseEvent e) {
+	}
+	public void mousePressed(MouseEvent e) {
+	}
+	public void mouseReleased(MouseEvent e) {
+	}
+    }
 
+    class ExtruderPositionPanelUpdater implements java.beans.PropertyChangeListener {
+	PointPanel jPanel = null;
+	JSlider jSlider = null;
+	public ExtruderPositionPanelUpdater(PointPanel jPanel, JSlider jSlider) {
+	    this.jPanel = jPanel;
+	    this.jSlider= jSlider;
+	}
+	public void propertyChange(java.beans.PropertyChangeEvent evt) {
+	    if (evt.getPropertyName().compareTo("extruderX")==0) {
+		double x = ((Double)(evt.getNewValue())).doubleValue();
+		double x1 = x / GlobalSettings.getInstance().getBedWidth();
+		if (x1 >= 1.0) {
+		    x1 = 1.0;
+		}
+		if (x1 <= 0.0) {
+		    x1 = 0.0;
+		}
+		this.jPanel.setPointX(x1);
+		this.jPanel.repaint();
+	    } else if (evt.getPropertyName().compareTo("extruderY")==0) {
+		double y = ((Double)(evt.getNewValue())).doubleValue();
+		double y1 = y / GlobalSettings.getInstance().getBedHeight();
+		if (y1 >= 1.0) {
+		    y1 = 1.0;
+		}
+		if (y1 <= 0.0) {
+		    y1 = 0.0;
+		}
+		y1 = 1.0-y1;
+		this.jPanel.setPointY(y1);
+		this.jPanel.repaint();
+	    } else if (evt.getPropertyName().compareTo("extruderZ")==0) {
+		double z = ((Double)(evt.getNewValue())).doubleValue();
+		double z1 = z / GlobalSettings.getInstance().getMaxZ();
+		if (z1 < 0.0) {
+		    z1 = 0.0;
+		}
+		if (z1 >= 1.0) {
+		    z1 = 1.0;
+		}
+		int z2 = (int) Math.round(z1*((double)jSlider.getMaximum()));
+		if (z2 != jSlider.getValue()) {
+		    jSlider.setValue(z2);
+		}
+	    }
+	}
+    }
+
+    class ExtruderHeightPanelChangeListener implements ChangeListener {
+	private boolean valueChanged=false;
+	public void stateChanged(ChangeEvent e) {
+	    Object o1 = e.getSource();
+	    JSlider jSlider = null;
+	    if (o1 instanceof JSlider) {
+		jSlider = (JSlider)(o1);
+	    }
+	    if (jSlider != null) {
+		if (!jSlider.getValueIsAdjusting()) {
+		    logger.info(String.format("Extruder Height: %1$d", jSlider.getValue()));
+		    double h1 = ((double)(jSlider.getValue())) / ((double)(jSlider.getMaximum()));
+		    if (h1 < 0.0) {
+			h1 = 0.0;
+		    }
+		    if (h1 >= 1.0) {
+			h1 = 1.0;
+		    }
+		    if (pf1Device != null) {
+			if (valueChanged) {
+			    pf1Device.sendCommand(String.format("G1 Z%1$.2f F3000", h1*GlobalSettings.getInstance().getMaxZ()));
+			}
+		    }
+		    valueChanged=false;
+		    
+		} else {
+		    valueChanged=true;
+		}
+	    }
+	}
+    }
 }
