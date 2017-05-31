@@ -172,6 +172,16 @@ public class PF1DeviceServer implements Runnable {
 	}
     }
 
+    /**
+     * Send the command to the historyQueue and then send it to the printer.
+     *
+     * This function will gurantee the command is being put to the historyQueue
+     * and will be sent to the printer. Of course it doesn't know if the 
+     * printer will receive it or execute it now. But since it is in the
+     * historyQueue that means the printer will execute it for sure later.
+     *
+     * @cmdData the command
+     */
     private void doSend(CommandData cmdData) {
 	if (cmdData.getStripedCommand().length()<=0) {
 	    return;
@@ -192,6 +202,14 @@ public class PF1DeviceServer implements Runnable {
 	doResend(commandCounter-1);
     }
     
+    /**
+     * Resend a command from historyQueue
+     *
+     * It will resent all of the command in historyQueue whose line number is 
+     * larger than the parameter.
+     *
+     * @lineNumber the lineNumber that needs to be resent.
+     */
     private void doResend(int lineNumber) {
 	boolean resendAgain = true;
 	while (resendAgain) {
@@ -221,10 +239,19 @@ public class PF1DeviceServer implements Runnable {
     private LinkedList<CommandData> historyQueue = null;
 
     /**
-     * Send a command to the printer
+     * Send a command to the printer.
      *
-     * @command: the command to send to the printer
-     * @return: -1 if success. Otherwise it is the line number that needs to
+     * This command will try to send a command to a printer.
+     * If it gets a Resend message. It will return the line number indicate
+     * by the resend message. If it gets an OK then it will return -1.
+     *
+     * But each commands has its own timeout. After the timeout we assume
+     * it is ok and will also return -1. Don't worry about this because
+     * someone will send the next command soon and we can know if the timeout
+     * command needs a resend or not.
+     *
+     * @command the command to send to the printer
+     * @return -1 if success. Otherwise it is the line number that needs to
      * be resent.
      */
     private int sendCommandToPrinter(CommandData command) {
@@ -347,6 +374,8 @@ public class PF1DeviceServer implements Runnable {
 
     /**
      * Put a gcode to the commandQUeue. May block until the queue is empty.
+     *
+     * @gcode the gcode string.
      */
     public void sendCommand(String gcode) {
 	CommandData cmdData = new CommandData();
@@ -361,6 +390,9 @@ public class PF1DeviceServer implements Runnable {
 	}
     }
 
+    /**
+     * Please stop the thread
+     */
     public void pleaseStop() {
 	this.runningFlag=false;
     }

@@ -101,7 +101,7 @@ public class MyApplet extends JApplet {
      * This function should be only called once in 
      * init().
      *
-     * @return: a JPanel for "PrintingInfoPanel"
+     * @return a JPanel for "PrintingInfoPanel"
      */
     private JPanel createPrintingInfoPanel() {
 	JPanel printingInfoPanel = new JPanel();
@@ -225,7 +225,7 @@ public class MyApplet extends JApplet {
      * This function should be only called once in 
      * init().
      *
-     * @return: a JPanel for "ConnectPanel"
+     * @return a JPanel for "ConnectPanel"
      */
     private JPanel createConnectPanel() {
 	JPanel connectPanel = new JPanel();
@@ -250,7 +250,7 @@ public class MyApplet extends JApplet {
      * This function should be only called once in 
      * init().
      *
-     * @return: a JPanel for "FilamentPanel"
+     * @return a JPanel for "FilamentPanel"
      */
     private JPanel createFilamentPanel() {
 	JPanel filamentPanel = new JPanel();
@@ -280,7 +280,7 @@ public class MyApplet extends JApplet {
      * This function should be only called once in 
      * init().
      *
-     * @return: a JPanel for "FilamentPanel"
+     * @return a JPanel for "FilamentPanel"
      */
     private JPanel createLoadFilamentPanel() {
 	JPanel loadFilamentPanel = new JPanel();
@@ -315,7 +315,7 @@ public class MyApplet extends JApplet {
      * This function should be only called once in 
      * init().
      *
-     * @return: a JPanel for "SettingsPanel"
+     * @return a JPanel for "SettingsPanel"
      */
     private JPanel createSettingsPanel() {
 	JPanel settingsPanel = new JPanel();
@@ -363,7 +363,7 @@ public class MyApplet extends JApplet {
      * This function should be only called once in 
      * init().
      *
-     * @return: a JPanel for "InfoPanel"
+     * @return a JPanel for "InfoPanel"
      */
     private JPanel createInfoPanel() {
 	JPanel infoPanel = new JPanel();
@@ -399,7 +399,7 @@ public class MyApplet extends JApplet {
      * This function should be only called once in 
      * init().
      *
-     * @return: a JPanel for "UtilitiesPanel"
+     * @return a JPanel for "UtilitiesPanel"
      */
     private JPanel createUtilitiesPanel() {
 	JPanel utilitiesPanel = new JPanel();
@@ -515,7 +515,7 @@ public class MyApplet extends JApplet {
      * This function should be only called once in 
      * init().
      *
-     * @return: a JPanel for "MainPanel"
+     * @return a JPanel for "MainPanel"
      */
     private JPanel createMainPanel() {
 	JPanel mainPanel = new JPanel();
@@ -552,12 +552,19 @@ public class MyApplet extends JApplet {
     /**
      * Go to the card registered by name
      *
-     * @name: the name of the card
+     * @name the name of the card
      */
     public void goToCard(String name) {
 	((CardLayout)cards.getLayout()).show(cards, name);
     }
 
+    /**
+     * Load an icon from jar and resize the maximum side to iconSize
+     *
+     * @fileName the filename of the icon in jar
+     * @iconSize resize the icon to iconSize
+     * @return an ImageIcon
+     */
     private ImageIcon loadIcon(String fileName, int iconSize){
 	ImageIcon ret = null;
 	ImageIcon orig = null;
@@ -575,6 +582,10 @@ public class MyApplet extends JApplet {
 	return ret;
     }
 
+    /**
+     * Stop the applet. Close the serial connections.
+     * 
+     */
     public void stop() {
 	if (loadFilamentThread != null) {
 	    loadFilamentThread.pleaseStop();
@@ -611,6 +622,9 @@ public class MyApplet extends JApplet {
 	super.stop();
     }
 
+    /**
+     * The ActionListener for PrintButton in MainPanel
+     */
     class PrintButtonActionListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 	    logger.info("Print");
@@ -630,6 +644,9 @@ public class MyApplet extends JApplet {
 	}
     }
 
+    /**
+     * The ActionListener for FilamentButton in MainPanel
+     */
     class FilamentButtonActionListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 	    logger.info("Filament");
@@ -637,6 +654,9 @@ public class MyApplet extends JApplet {
 	}
     }
 
+    /**
+     * The ItemListener for PreheatButton in MainPanel
+     */
     class PreheatButtonActionListener implements ActionListener, ItemListener {
 	public void actionPerformed(ActionEvent e) {
 	    logger.info("Preheat");
@@ -656,6 +676,9 @@ public class MyApplet extends JApplet {
 	}
     }
 
+    /**
+     * The ActionListener for UtilitiesButton in MainPanel
+     */
     class UtilitiesButtonActionListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 	    logger.info("Utilities");
@@ -663,6 +686,9 @@ public class MyApplet extends JApplet {
 	}
     }
 
+    /**
+     * The ActionListener for SettingsButton in MainPanel
+     */
     class SettingsButtonActionListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 	    logger.info("Settings");
@@ -670,6 +696,9 @@ public class MyApplet extends JApplet {
 	}
     }
 
+    /**
+     * The ActionListener for InfoButton in MainPanel
+     */
     class InfoButtonActionListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 	    logger.info("Info");
@@ -677,6 +706,9 @@ public class MyApplet extends JApplet {
 	}
     }
 
+    /**
+     * The ActionListener for LoadFilamentButton in FilamentPanel
+     */
     class LoadFilamentButtonActionListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 	    logger.info("Load Filamente");
@@ -687,6 +719,9 @@ public class MyApplet extends JApplet {
 	}
     }
 
+    /**
+     * The ActionListener for UnloadFilamentButton in FilamentPanel
+     */
     class UnloadFilamentButtonActionListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 	    logger.info("Unload Filamente");
@@ -697,6 +732,9 @@ public class MyApplet extends JApplet {
 	}
     }
 
+    /**
+     * The ActionListener for StopLoadFilamentButton in LoadFilamentPanel
+     */
     class StopLoadFilamentButtonActionListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 	    logger.info("Stop Load Filamente");
@@ -732,6 +770,9 @@ public class MyApplet extends JApplet {
 	}
     }
 
+    /**
+     * The ActionListener for BackToMainButton. Can be used in several cards.
+     */
     class BackToMainButtonActionListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 	    logger.info("BackToMainButton");
@@ -767,6 +808,9 @@ public class MyApplet extends JApplet {
 	}
     }
 
+    /**
+     * The ActionListener for ConnectButton in ConnectPanel
+     */
     class ConnectButtonActionListener implements ActionListener {
 	private JComboBox deviceComboBox = null;
 	public ConnectButtonActionListener(JComboBox deviceComboBox) {
@@ -795,6 +839,9 @@ public class MyApplet extends JApplet {
 	}
     }
 
+    /**
+     * The PropertyChangeListener for JLabel, JTextField
+     */
     class MyAppletPropertyChangeListener implements java.beans.PropertyChangeListener {
 	private javax.swing.text.JTextComponent jTextComponent = null;
 	private JLabel jLabel = null;
@@ -814,6 +861,10 @@ public class MyApplet extends JApplet {
 	}
     }
 
+    /**
+     * This class listens to the progess from FileCommandSender class and
+     * updates the JProgressBar, time estimation and the related stuff.
+     */
     class FileCommandSenderProgressChangeListener implements java.beans.PropertyChangeListener {
 	JProgressBar jProgressBar = null;
 	JLabel jCurrentLine = null;

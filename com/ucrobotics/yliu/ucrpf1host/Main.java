@@ -30,6 +30,9 @@ import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
 
+/**
+ * Main class. The program entry
+ */
 public class Main {
     private Scanner stdin = new Scanner(System.in);
     private java.util.logging.Logger logger = null;
