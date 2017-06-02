@@ -100,6 +100,8 @@ public class CommandData {
 
     /**
      * Get estimated timeout of this command in ms
+     *
+     * @return estimated timeout in ms
      */
     public long getEstimatedTimeout() {
 	long ret = 5000;   // default: 5 sec
@@ -119,6 +121,12 @@ public class CommandData {
 
     /**
      * Store previous extruder position
+     *
+     * @X the value of X
+     * @Y the value of Y
+     * @Z the value of Z
+     * @E the value of E
+     * @F the value of F
      */
     public void setPrevExtruderPos(double X,double Y,double Z, double E, double F) {
 	this.prevExtruderX=X;
