@@ -22,12 +22,21 @@ import java.util.*;
 import java.util.regex.*;
 import gnu.io.*;
 
+
+/**
+ * Class to represent the data received from the printer
+ */
 public class ReceivedData {
     private String data=null;
     private long timestamp=0;
     private Pattern resendPattern = null;
     private Pattern temperaturePattern = null;
 
+    /**
+     * Constructor. Data is the string from the printer.
+     *
+     * @data The string received from the printer.
+     */
     public ReceivedData(String data) {
 	timestamp = Calendar.getInstance().getTimeInMillis();
 	this.data = data;
@@ -35,9 +44,20 @@ public class ReceivedData {
 	temperaturePattern = Pattern.compile(".*T:([0-9.]+)/([0-9.]+)\\s+B:([0-9.]+)/([0-9.]+).*");
     }
 
+    /**
+     * Get the raw data from the printer
+     *
+     * @return the data
+     */
     public String getData() {
 	return data;
     }
+
+    /**
+     * Get the timestamp for when received the data
+     *
+     * @return timestamp
+     */
     public long getTimestamp() {
 	return timestamp;
     }
@@ -60,7 +80,7 @@ public class ReceivedData {
     /**
      * Is the received message an Resend?
      *
-     * @return: -1: not a resend. other number is the line to resend
+     * @return -1: not a resend. other number is the line to resend
      */
     public int getResend() {
 	Matcher m = resendPattern.matcher(data.trim());
@@ -79,7 +99,7 @@ public class ReceivedData {
     /**
      * Is the received message an temperature value?
      *
-     * @return: NaN: not a resend. other number is the temperature
+     * @return NaN: not a resend. other number is the temperature
      */
     public double getExtruderTemperature() {
 	Matcher m = temperaturePattern.matcher(data.trim());
@@ -98,7 +118,7 @@ public class ReceivedData {
     /**
      * Is the received message an temperature value?
      *
-     * @return: NaN: not a resend. other number is the target temperature
+     * @return NaN: not a resend. other number is the target temperature
      */
     public double getExtruderTargetTemperature() {
 	Matcher m = temperaturePattern.matcher(data.trim());
