@@ -28,6 +28,7 @@
 	  <junit printsummary="yes">
 	    <formatter type="plain" usefile="false" />
 	    <test name="com.ucrobotics.yliu.ucrpf1host.test.TestReceivedData" />
+	    <test name="com.ucrobotics.yliu.ucrpf1host.test.TestCommandData" />
 	    <classpath refid="maincp">
 	    </classpath>
 	    <classpath>

@@ -361,8 +361,7 @@ public class PF1DeviceServer implements Runnable {
 	    if (cmdData == null) {
 		/* status update */
 		logger.info("Status update");
-		CommandData M105 = new CommandData();
-		M105.setCommand("M105");
+		CommandData M105 = new CommandData("M105");
 		doSend(M105);
 	    } else {
 		/* execute command */
@@ -378,8 +377,7 @@ public class PF1DeviceServer implements Runnable {
      * @gcode the gcode string.
      */
     public void sendCommand(String gcode) {
-	CommandData cmdData = new CommandData();
-	cmdData.setCommand(gcode);
+	CommandData cmdData = new CommandData(gcode);
 	while (true) {
 	    try {
 		commandQueue.put(cmdData);

@@ -21,6 +21,9 @@ import java.util.logging.*;
 import java.util.*;
 import gnu.io.*;
 
+/**
+ * Represent a G-Code command
+ */
 public class CommandData {
     private String command=null;
     private ArrayList<ReceivedData> answer=null;
@@ -32,16 +35,33 @@ public class CommandData {
     private double prevExtruderE=0.0;
     private double prevExtruderF=0.0;
 
-    public CommandData() {
-	answer = new ArrayList<ReceivedData>();
+    /**
+     * Constuct a CommandData with the G-Code command as a String.
+     * 
+     * @gCodeCommand the G-Code string
+     */
+    public CommandData(String gCodeCommand) {
+	this.answer = new ArrayList<ReceivedData>();
+	this.command = gCodeCommand;
     }
 
-    public void setCommand(String command) {
-	this.command = command;
-    }
+    /**
+     * Get the raw G-code of the CommandData
+     *
+     * @return the G-code string
+     */
     public String getCommand() {
 	return command;
     }
+    
+    /**
+     * Get the stripped G-code of the CommandData.
+     *
+     * It will remove the comments start with semi-comma (;) and also
+     * removes all whitespaces in the g-code.
+     *
+     * @return the stripped G-code string
+     */
     public String getStripedCommand() {
 	String ret = command;
 	int commentIndex = ret.indexOf(';');
@@ -52,6 +72,17 @@ public class CommandData {
 	return ret;
     }
 
+    /**
+     * Calculate the checksum of a command.
+     *
+     * You should calculate the checksum based on stripped command and with
+     * the line number added. Not the raw one.
+     * And before calculation you should convert it to bytes[] rather
+     * than String.
+     *
+     * @s the g-code string in byte[]
+     * @return the checksum.
+     */
     private int getChecksum(byte[] s) {
 	int checksum=0;
 	for (int i=0; i<s.length; i++) {
@@ -60,10 +91,24 @@ public class CommandData {
 	}
 	return checksum;
     }
+
+    /**
+     * Get the encoded G-code command with line number and checksum added.
+     *
+     * Please use setLineNumber() first before call this function
+     *
+     * @return the encoded g-code string in byte[]
+     */
     public byte[] getEncodedCommand() {
 	return getEncodedCommand(getLineNumber());
     }
     
+    /**
+     * Get the encoded G-code command with line number and checksum added.
+     *
+     * @lineNumber the line number of this command
+     * @return the encoded g-code string in byte[]
+     */
     public byte[] getEncodedCommand(int lineNumber) {
 	String linedCommand = null;
 	linedCommand = String.format("N%1$d%2$s",lineNumber, getStripedCommand());
@@ -80,20 +125,45 @@ public class CommandData {
 	return ret;
     }
 
+    /**
+     * Get the lineNumber of this CommandData
+     *
+     * @return line number
+     */
     public int getLineNumber() {
 	return lineNumber;
     }
+
+    /**
+     * Set the lineNumber of this CommandData
+     *
+     * @lineNumber line number
+     */
     public void setLineNumber(int lineNumber) {
 	this.lineNumber = lineNumber;
     }
 
+    /**
+     * update the timestamp of this CommandData to now
+     */
     public void updateTimestamp() {
 	this.timestamp = Calendar.getInstance().getTimeInMillis();
     }
+
+    /**
+     * get the timestamp of this CommandData
+     *
+     * @return the timestamp
+     */
     public long getTimestamp() {
 	return timestamp;
     }
 
+    /**
+     * Add a response from the printer
+     *
+     * @rd the response from the printer
+     */
     public void addAnswer(ReceivedData rd) {
 	answer.add(rd);
     }
@@ -120,7 +190,7 @@ public class CommandData {
     }
 
     /**
-     * Store previous extruder position
+     * Store previous extruder position before executing the command.
      *
      * @X the value of X
      * @Y the value of Y
