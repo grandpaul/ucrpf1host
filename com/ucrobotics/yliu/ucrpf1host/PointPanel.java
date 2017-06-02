@@ -30,11 +30,17 @@ import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
 
+/**
+ * A empty panel with a point on it.
+ */
 public class PointPanel extends JPanel {
     private double pointX = 0.0;
     private double pointY = 0.0;
     private java.beans.PropertyChangeSupport mPcs = new java.beans.PropertyChangeSupport(this);
 
+    /**
+     * An example of the mouseListener for this PointPanel.
+     */
     class MyMouseListener implements MouseListener {
 	public void mouseClicked(MouseEvent e) {
 	    int mx = e.getX();
@@ -56,12 +62,22 @@ public class PointPanel extends JPanel {
 	}
     }
 
+    /**
+     * Constructs a PointPanel. There's no preferredSize of this panel.
+     * It is able to use setPreferredSize() to set a preferredSize.
+     */
     public PointPanel() {
 	super();
 	this.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-	//this.addMouseListener(new MyMouseListener());
     }
 
+    /**
+     * draw an oval
+     *
+     * @x center of the oval in x-axis
+     * @y center of the oval in y-axis
+     * @r the radius of the oval
+     */
     private void myDrawOval(Graphics g, int x, int y, double r) {
 	for (double angle=0.0; angle<360.0; angle+=3.0) {
 	    double x1 = ((double)x)+r*Math.sin(Math.toRadians(angle));
@@ -72,6 +88,11 @@ public class PointPanel extends JPanel {
 	}
     }
 
+    /**
+     * paint the component
+     *
+     * @g the graphics
+     */
     @Override
     public void paintComponent(Graphics g) {
 	super.paintComponent(g);
@@ -82,7 +103,8 @@ public class PointPanel extends JPanel {
 	g.setColor(Color.RED);
 	int px = (int)Math.round(getPointX()*((double)getWidth()));
 	int py = (int)Math.round(getPointY()*((double)getHeight()));
-	
+
+	/* use myDrawOval() if the coordinate is negatove for drawOval() */
 	if (px-5 < 0 || py-5 < 0) {
 	    myDrawOval(g,px,py,2.5);
 	} else {
@@ -91,6 +113,11 @@ public class PointPanel extends JPanel {
 	g.setColor(currentColor);
     }
 
+    /**
+     * set the x-coordinate of the point
+     *
+     * @pointX the x-coordinate of the point. range: 0.0 to 1.0
+     */
     public void setPointX(double pointX) {
 	double oldX = this.pointX;
 	this.pointX = pointX;
@@ -98,9 +125,21 @@ public class PointPanel extends JPanel {
 	    mPcs.firePropertyChange("pointX", new Double(oldX), new Double(pointX));
 	}
     }
+
+    /**
+     * get the x-coordinate of the point
+     *
+     * @return the x-coordinate of the point. range: 0.0 to 1.0
+     */
     public double getPointX() {
 	return pointX;
     }
+    
+    /**
+     * set the y-coordinate of the point
+     *
+     * @pointY the y-coordinate of the point. range: 0.0 to 1.0
+     */
     public void setPointY(double pointY) {
 	double oldY = this.pointY;
 	this.pointY = pointY;
@@ -108,9 +147,22 @@ public class PointPanel extends JPanel {
 	    mPcs.firePropertyChange("pointY", new Double(oldY), new Double(pointY));
 	}
     }
+
+    /**
+     * get the y-coordinate of the point
+     *
+     * @return the y-coordinate of the point. range: 0.0 to 1.0
+     */
     public double getPointY() {
 	return pointY;
     }
+    
+    /**
+     * set the coordinate of the point
+     *
+     * @pointX the x-coordinate of the point. range: 0.0 to 1.0
+     * @pointY the y-coordinate of the point. range: 0.0 to 1.0
+     */
     public void setPointXY(double pointX, double pointY) {
 	double oldX = this.pointX;
 	this.pointX = pointX;
@@ -124,13 +176,47 @@ public class PointPanel extends JPanel {
 	}
     }
 
-    
+    /**
+     * Add a PropertyChangeListener to the listener list. 
+     *
+     * The listener is registered for all properties.
+     * The same listener object may be added more than once, and will be
+     * called as many times as it is added. If listener is null, no exception
+     * is thrown and no action is taken.
+     *
+     * @listener The PropertyChangeListener to be added
+     */
     public void addPropertyChangeListener(java.beans.PropertyChangeListener listener) {
 	mPcs.addPropertyChangeListener(listener);
     }
+
+    /**
+     * Add a PropertyChangeListener for a specific property.
+     *
+     * The listener will be invoked only when a call on firePropertyChange
+     * names that specific property. The same listener object may be added
+     * more than once. For each property, the listener will be invoked the
+     * number of times it was added for that property. If propertyName or
+     * listener is null, no exception is thrown and no action is taken.
+     *
+     * @propertyName The name of the property to listen on.
+     * @listener The PropertyChangeListener to be added
+     */
     public void addPropertyChangeListener(String propertyName, java.beans.PropertyChangeListener listener) {
 	mPcs.addPropertyChangeListener(propertyName, listener);
     }
+
+    /**
+     * Remove a PropertyChangeListener from the listener list.
+     *
+     * This removes a PropertyChangeListener that was registered for all
+     * properties. If listener was added more than once to the same event
+     * source, it will be notified one less time after being removed. If
+     * listener is null, or was never added, no exception is thrown and no
+     * action is taken.
+     *
+     * @listener The PropertyChangeListener to be removed
+     */
     public void removePropertyChangeListener(java.beans.PropertyChangeListener listener) {
 	mPcs.removePropertyChangeListener(listener);
     }
