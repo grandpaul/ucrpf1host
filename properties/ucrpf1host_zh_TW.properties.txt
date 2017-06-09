@@ -5,6 +5,7 @@ Extruder_Height=噴頭高度
 Extruder_Position=噴頭位置
 Filament=塑料
 GCode=G-Code
+Home=歸位
 Info=資訊
 Lines_COLON=行數:
 Load_Filament=進料

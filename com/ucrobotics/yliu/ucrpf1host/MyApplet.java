@@ -413,9 +413,22 @@ public class MyApplet extends JApplet {
 	JPanel centerPanel = new JPanel();
 	centerPanel.setLayout(new GridBagLayout());
 
+	JButton homeButton = new JButton(resources.getString("Home"));
+	GridBagConstraints homeButtonGC = new GridBagConstraints();
+	homeButtonGC.gridx = 1;
+	homeButtonGC.gridy = 1;
+	homeButtonGC.gridwidth = 2;
+	homeButtonGC.gridheight = 2;
+	homeButtonGC.weightx = 0;
+	homeButtonGC.weighty = 0;
+	homeButtonGC.fill = GridBagConstraints.BOTH;
+	homeButtonGC.anchor = GridBagConstraints.WEST;
+	homeButton.addActionListener(new UtilitiesHomeButtonActionListener());
+	centerPanel.add(homeButton, homeButtonGC);
+
 	JLabel extruderPositionLabel = new JLabel(resources.getString("Extruder_Position"));
 	GridBagConstraints extruderPositionLabelGC = new GridBagConstraints();
-	extruderPositionLabelGC.gridx = 1;
+	extruderPositionLabelGC.gridx = 3;
 	extruderPositionLabelGC.gridy = 3;
 	extruderPositionLabelGC.gridwidth = 1;
 	extruderPositionLabelGC.gridheight = 1;
@@ -428,7 +441,7 @@ public class MyApplet extends JApplet {
 	PointPanel extruderPositionPanel = new PointPanel();
 	extruderPositionPanel.setPreferredSize(new Dimension(100,100));
 	GridBagConstraints extruderPositionPanelGC = new GridBagConstraints();
-	extruderPositionPanelGC.gridx = 2;
+	extruderPositionPanelGC.gridx = 4;
 	extruderPositionPanelGC.gridy = 1;
 	extruderPositionPanelGC.gridwidth = 3;
 	extruderPositionPanelGC.gridheight = 3;
@@ -442,7 +455,7 @@ public class MyApplet extends JApplet {
 
 	JLabel extruderHeightLabel = new JLabel(resources.getString("Extruder_Height"));
 	GridBagConstraints extruderHeightLabelGC = new GridBagConstraints();
-	extruderHeightLabelGC.gridx = 7;
+	extruderHeightLabelGC.gridx = 9;
 	extruderHeightLabelGC.gridy = 3;
 	extruderHeightLabelGC.gridwidth = 1;
 	extruderHeightLabelGC.gridheight = 1;
@@ -454,7 +467,7 @@ public class MyApplet extends JApplet {
 	
 	JSlider extruderHeightPanel = new JSlider(JSlider.VERTICAL,0,100000,0);
 	GridBagConstraints extruderHeightPanelGC = new GridBagConstraints();
-	extruderHeightPanelGC.gridx = 8;
+	extruderHeightPanelGC.gridx = 10;
 	extruderHeightPanelGC.gridy = 1;
 	extruderHeightPanelGC.gridwidth = 2;
 	extruderHeightPanelGC.gridheight = 3;
@@ -1087,6 +1100,15 @@ public class MyApplet extends JApplet {
 		pf1Device.sendCommand(jTextField.getText());
 	    }
 	    jTextField.setText("");
+	}
+    }
+
+    class UtilitiesHomeButtonActionListener implements ActionListener {
+	public void actionPerformed(ActionEvent e) {
+	    logger.info(String.format("Utilities -> Home Button pressed."));
+	    if (pf1Device != null) {
+		pf1Device.sendCommand("G28");
+	    }
 	}
     }
 
