@@ -76,6 +76,9 @@ public class ReceivedData {
 	if (data.trim().compareToIgnoreCase("!!")==0) {
 	    return true;
 	}
+	if (data.trim().toLowerCase().startsWith("ok")) {
+	    return true;
+	}
 	return false;
     }
 
