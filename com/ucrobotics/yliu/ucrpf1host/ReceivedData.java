@@ -31,6 +31,7 @@ public class ReceivedData {
     private long timestamp=0;
     private Pattern resendPattern = null;
     private Pattern temperaturePattern = null;
+    private Pattern temperaturePattern_Marlin = null;
 
     /**
      * Constructor. Data is the string from the printer.
@@ -42,6 +43,7 @@ public class ReceivedData {
 	this.data = data;
 	resendPattern = Pattern.compile("[Rr][Ee][Ss][Ee][Nn][Dd][:]\\s*(\\d+)");
 	temperaturePattern = Pattern.compile(".VALUE.\\s*T:([0-9.]+)/([0-9.]+)\\s+B:([0-9.]+)/([0-9.]+)\\s.*");
+	temperaturePattern_Marlin = Pattern.compile("T:([0-9.]+)\\s/([0-9.]+)\\s+B:([0-9.]+)\\s/([0-9.]+)\\s.*");
     }
 
     /**
@@ -103,8 +105,8 @@ public class ReceivedData {
      */
     public double getExtruderTemperature() {
 	Matcher m = temperaturePattern.matcher(data.trim());
+	double ret = Double.NaN;
 	if (m.matches()) {
-	    double ret = Double.NaN;
 	    try {
 		ret = Double.parseDouble(m.group(1));
 	    } catch (java.lang.NumberFormatException e) {
@@ -112,6 +114,15 @@ public class ReceivedData {
 	    }
 	    return ret;
 	}
+	Matcher m_marlin = temperaturePattern_Marlin.matcher(data.trim());
+	if (m_marlin.matches()) {
+	    try {
+		ret = Double.parseDouble(m_marlin.group(1));
+	    } catch (java.lang.NumberFormatException e) {
+		ret = Double.NaN;
+	    }
+	    return ret;
+	}	    
 	return Double.NaN;
     }
 
@@ -122,8 +133,8 @@ public class ReceivedData {
      */
     public double getExtruderTargetTemperature() {
 	Matcher m = temperaturePattern.matcher(data.trim());
+	double ret = Double.NaN;
 	if (m.matches()) {
-	    double ret = Double.NaN;
 	    try {
 		ret = Double.parseDouble(m.group(2));
 	    } catch (java.lang.NumberFormatException e) {
@@ -131,6 +142,15 @@ public class ReceivedData {
 	    }
 	    return ret;
 	}
+	Matcher m_marlin = temperaturePattern_Marlin.matcher(data.trim());
+	if (m_marlin.matches()) {
+	    try {
+		ret = Double.parseDouble(m_marlin.group(2));
+	    } catch (java.lang.NumberFormatException e) {
+		ret = Double.NaN;
+	    }
+	    return ret;
+	}	    
 	return Double.NaN;
     }
     
