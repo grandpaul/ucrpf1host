@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=ucrpf1host
+Comment=Host controller for Panowin F1 3D printer
+Comment[zh_TW]=磐紋 F1 3D 印表機控制介面
+Exec=ucrpf1host
+Terminal=false
+Categories=Graphics;3DGraphics;Engineering;
+Icon=/usr/share/pixmaps/ucrpf1host.svg
