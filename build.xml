@@ -29,6 +29,7 @@
 	    <formatter type="plain" usefile="false" />
 	    <test name="com.ucrobotics.yliu.ucrpf1host.test.TestReceivedData" />
 	    <test name="com.ucrobotics.yliu.ucrpf1host.test.TestCommandData" />
+	    <test name="com.ucrobotics.yliu.ucrpf1host.test.TestPointPanel" />
 	    <classpath refid="maincp">
 	    </classpath>
 	    <classpath>
