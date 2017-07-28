@@ -131,6 +131,17 @@ public class TestReceivedData extends junit.framework.TestCase {
 	assertTrue(!Double.isNaN(receivedData.getExtruderTargetTemperature()));
 	assertEquals(receivedData.getExtruderTemperature(), 45.0);
 	assertEquals(receivedData.getExtruderTargetTemperature(), 180.0);
+
+	data = "[VALUE] T:-10.3/180.0 B:0.0/0.0 S:0 F:'' P:-1 I:0 D:100 E:100";
+	receivedData = new com.ucrobotics.yliu.ucrpf1host.ReceivedData(data);
+	assertEquals(receivedData.getData().compareTo(data), 0);
+	assertEquals(receivedData.getResend(), -1);
+	assertTrue(!receivedData.isOK());
+	assertTrue(!Double.isNaN(receivedData.getExtruderTemperature()));
+	assertTrue(!Double.isNaN(receivedData.getExtruderTargetTemperature()));
+	assertEquals(receivedData.getExtruderTemperature(), -10.3);
+	assertEquals(receivedData.getExtruderTargetTemperature(), 180.0);
+
     }
 
     

@@ -123,12 +123,12 @@ public class PF1DeviceServer implements Runnable {
 	    return;
 	}
 
-	java.util.regex.Pattern g1Pattern = java.util.regex.Pattern.compile("^G1([A-Z][0-9.]*)*");
+	java.util.regex.Pattern g1Pattern = java.util.regex.Pattern.compile("^G1([A-Z][0-9.\\-]*)*");
 	java.util.regex.Matcher g1Matcher = g1Pattern.matcher(cmd);
 	if (g1Matcher.matches()) {
 	    /* reset some axis */
 	    String axis = cmd.substring(2);
-	    java.util.regex.Pattern axPattern = java.util.regex.Pattern.compile("[A-Z][0-9.]*");
+	    java.util.regex.Pattern axPattern = java.util.regex.Pattern.compile("[A-Z][0-9.\\-]*");
 	    java.util.regex.Matcher axMatcher = axPattern.matcher(axis);
 	    while (axMatcher.find()) {
 		String a1 = axMatcher.group();
@@ -147,12 +147,12 @@ public class PF1DeviceServer implements Runnable {
 	    return;
 	}
 
-	java.util.regex.Pattern g92Pattern = java.util.regex.Pattern.compile("^G92([A-Z][0-9.]*)*");
+	java.util.regex.Pattern g92Pattern = java.util.regex.Pattern.compile("^G92([A-Z][0-9.\\-]*)*");
 	java.util.regex.Matcher g92Matcher = g92Pattern.matcher(cmd);
 	if (g92Matcher.matches()) {
 	    /* reset some axis */
 	    String axis = cmd.substring(2);
-	    java.util.regex.Pattern axPattern = java.util.regex.Pattern.compile("[A-Z][0-9.]*");
+	    java.util.regex.Pattern axPattern = java.util.regex.Pattern.compile("[A-Z][0-9.\\-]*");
 	    java.util.regex.Matcher axMatcher = axPattern.matcher(axis);
 	    while (axMatcher.find()) {
 		String a1 = axMatcher.group();
