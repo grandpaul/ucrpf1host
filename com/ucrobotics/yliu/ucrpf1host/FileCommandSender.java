@@ -112,7 +112,7 @@ public class FileCommandSender extends Thread {
 		}
 		int oldCurrentLine = currentLine;
 		currentLine = currentLine + 1;
-		mPcs.firePropertyChange("currentLine", new Integer(oldCurrentLine), new Integer(currentLine));
+		mPcs.firePropertyChange("currentLine", Integer.valueOf(oldCurrentLine), Integer.valueOf(currentLine));
 		pf1Device.sendCommand(line);
 	    }
 	} catch (IOException e) {

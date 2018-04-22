@@ -341,7 +341,7 @@ public class MyApplet extends JApplet {
 	preheatTemperatureLabelGC.anchor = GridBagConstraints.EAST;
 	centerPanel.add(preheatTemperatureLabel, preheatTemperatureLabelGC);
 
-	JSpinner preheatTemperature = new JSpinner (new SpinnerNumberModel(new Integer((int)Math.round(GlobalSettings.getInstance().getExtruderPreheatTemperature())), new Integer(100), new Integer(260), new Integer(1)));
+	JSpinner preheatTemperature = new JSpinner (new SpinnerNumberModel(Integer.valueOf((int)Math.round(GlobalSettings.getInstance().getExtruderPreheatTemperature())), Integer.valueOf(100), Integer.valueOf(260), Integer.valueOf(1)));
 	GridBagConstraints preheatTemperatureGC = new GridBagConstraints();
 	preheatTemperatureGC.gridx = 2;
 	preheatTemperatureGC.gridy = 1;

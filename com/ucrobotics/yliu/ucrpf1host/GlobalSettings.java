@@ -43,7 +43,7 @@ public class GlobalSettings {
 	double oldTemperature = this.extruderPreheatTemperature;
 	this.extruderPreheatTemperature = extruderPreheatTemperature;
 	if (oldTemperature != extruderPreheatTemperature) {
-	    mPcs.firePropertyChange("extruderPreheatTemperature", new Double(oldTemperature), new Double(extruderPreheatTemperature));
+	    mPcs.firePropertyChange("extruderPreheatTemperature", Double.valueOf(oldTemperature), Double.valueOf(extruderPreheatTemperature));
 	}
     }
 
@@ -54,7 +54,7 @@ public class GlobalSettings {
 	double oldBedWidth = this.bedWidth;
 	this.bedWidth = bedWidth;
 	if (oldBedWidth != bedWidth) {
-	    mPcs.firePropertyChange("bedWidth", new Double(oldBedWidth), new Double(bedWidth));
+	    mPcs.firePropertyChange("bedWidth", Double.valueOf(oldBedWidth), Double.valueOf(bedWidth));
 	}
     }
 
@@ -65,7 +65,7 @@ public class GlobalSettings {
 	double oldBedHeight = this.bedHeight;
 	this.bedHeight = bedHeight;
 	if (oldBedHeight != bedHeight) {
-	    mPcs.firePropertyChange("bedHeight", new Double(oldBedHeight), new Double(bedHeight));
+	    mPcs.firePropertyChange("bedHeight", Double.valueOf(oldBedHeight), Double.valueOf(bedHeight));
 	}
     }
 
@@ -76,7 +76,7 @@ public class GlobalSettings {
 	double oldMaxZ = this.maxZ;
 	this.maxZ = maxZ;
 	if (oldMaxZ != maxZ) {
-	    mPcs.firePropertyChange("maxZ", new Double(oldMaxZ), new Double(maxZ));
+	    mPcs.firePropertyChange("maxZ", Double.valueOf(oldMaxZ), Double.valueOf(maxZ));
 	}
     }
 

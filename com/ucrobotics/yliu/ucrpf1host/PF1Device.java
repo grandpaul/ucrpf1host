@@ -124,7 +124,7 @@ public class PF1Device {
 	this.extruderX = extruderX;
 	java.util.logging.Logger.getLogger(PF1Device.loggerName).finer(String.format("ExtruderX: %1$f", extruderX));
 	if (oldExtruderX != extruderX) {
-	    mPcs.firePropertyChange("extruderX", new Double(oldExtruderX), new Double(extruderX));
+	    mPcs.firePropertyChange("extruderX", Double.valueOf(oldExtruderX), Double.valueOf(extruderX));
 	}
     }
     public double getExtruderY() {
@@ -135,7 +135,7 @@ public class PF1Device {
 	this.extruderY = extruderY;
 	java.util.logging.Logger.getLogger(PF1Device.loggerName).finer(String.format("ExtruderY: %1$f", extruderY));
 	if (oldExtruderY != extruderY) {
-	    mPcs.firePropertyChange("extruderY", new Double(oldExtruderY), new Double(extruderY));
+	    mPcs.firePropertyChange("extruderY", Double.valueOf(oldExtruderY), Double.valueOf(extruderY));
 	}
     }
     public double getExtruderZ() {
@@ -145,7 +145,7 @@ public class PF1Device {
 	double oldExtruderZ = this.extruderZ;
 	this.extruderZ = extruderZ;
 	if (oldExtruderZ != extruderZ) {
-	    mPcs.firePropertyChange("extruderZ", new Double(oldExtruderZ), new Double(extruderZ));
+	    mPcs.firePropertyChange("extruderZ", Double.valueOf(oldExtruderZ), Double.valueOf(extruderZ));
 	}
     }
     public double getExtruderE() {
@@ -155,7 +155,7 @@ public class PF1Device {
 	double oldExtruderE = this.extruderE;
 	this.extruderE = extruderE;
 	if (oldExtruderE != extruderE) {
-	    mPcs.firePropertyChange("extruderE", new Double(oldExtruderE), new Double(extruderE));
+	    mPcs.firePropertyChange("extruderE", Double.valueOf(oldExtruderE), Double.valueOf(extruderE));
 	}
     }
     public double getExtruderF() {
@@ -165,7 +165,7 @@ public class PF1Device {
 	double oldExtruderF = this.extruderF;
 	this.extruderF = extruderF;
 	if (oldExtruderF != extruderF) {
-	    mPcs.firePropertyChange("extruderF", new Double(oldExtruderF), new Double(extruderF));
+	    mPcs.firePropertyChange("extruderF", Double.valueOf(oldExtruderF), Double.valueOf(extruderF));
 	}
     }
 
@@ -173,7 +173,7 @@ public class PF1Device {
 	double oldTemperature = this.extruderTemperature;
 	this.extruderTemperature = extruderTemperature;
 	if (oldTemperature != extruderTemperature) {
-	    mPcs.firePropertyChange("extruderTemperature", new Double(oldTemperature), new Double(extruderTemperature));
+	    mPcs.firePropertyChange("extruderTemperature", Double.valueOf(oldTemperature), Double.valueOf(extruderTemperature));
 	}
     }
     public double getExtruderTargetTemperature() {
@@ -183,7 +183,7 @@ public class PF1Device {
 	double oldTargetTemperature = this.extruderTargetTemperature;
 	this.extruderTargetTemperature = extruderTargetTemperature;
 	if (oldTargetTemperature != extruderTargetTemperature) {
-	    mPcs.firePropertyChange("extruderTargetTemperature", new Double(oldTargetTemperature), new Double(extruderTargetTemperature));
+	    mPcs.firePropertyChange("extruderTargetTemperature", Double.valueOf(oldTargetTemperature), Double.valueOf(extruderTargetTemperature));
 	}
     }
     public double getExtruderTemperature() {

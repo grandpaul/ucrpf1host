@@ -122,7 +122,7 @@ public class PointPanel extends JPanel {
 	double oldX = this.pointX;
 	this.pointX = pointX;
 	if (oldX != pointX) {
-	    mPcs.firePropertyChange("pointX", new Double(oldX), new Double(pointX));
+	    mPcs.firePropertyChange("pointX", Double.valueOf(oldX), Double.valueOf(pointX));
 	}
     }
 
@@ -144,7 +144,7 @@ public class PointPanel extends JPanel {
 	double oldY = this.pointY;
 	this.pointY = pointY;
 	if (oldY != pointY) {
-	    mPcs.firePropertyChange("pointY", new Double(oldY), new Double(pointY));
+	    mPcs.firePropertyChange("pointY", Double.valueOf(oldY), Double.valueOf(pointY));
 	}
     }
 
@@ -169,10 +169,10 @@ public class PointPanel extends JPanel {
 	double oldY = this.pointY;
 	this.pointY = pointY;
 	if (oldX != pointX) {
-	    mPcs.firePropertyChange("pointX", new Double(oldX), new Double(pointX));
+	    mPcs.firePropertyChange("pointX", Double.valueOf(oldX), Double.valueOf(pointX));
 	}
 	if (oldY != pointY) {
-	    mPcs.firePropertyChange("pointY", new Double(oldY), new Double(pointY));
+	    mPcs.firePropertyChange("pointY", Double.valueOf(oldY), Double.valueOf(pointY));
 	}
     }
 

@@ -83,7 +83,7 @@ public class PF1DeviceServer implements Runnable {
 			    inBuffer.clear();
 			} else if (buf[i] == '\r') {
 			} else {
-			    inBuffer.add(new Byte(buf[i]));
+			    inBuffer.add(Byte.valueOf(buf[i]));
 			}
 		    }
 		}
