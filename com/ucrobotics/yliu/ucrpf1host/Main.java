@@ -37,7 +37,7 @@ public class Main {
     private Scanner stdin = new Scanner(System.in);
     private java.util.logging.Logger logger = null;
     public static String loggerName = "MainLogger";
-    private JApplet myapplet = null;
+    private MyApplet myapplet = null;
     private JFrame myframe = null;
 
     /**
@@ -61,8 +61,8 @@ public class Main {
 	
 	myframe.getContentPane().add(myapplet);
 	myframe.setSize(640,480);
-	myapplet.init();
-	myapplet.start();
+	//myapplet.init();
+	//myapplet.start();
 	myframe.setVisible(true);
 	
     }

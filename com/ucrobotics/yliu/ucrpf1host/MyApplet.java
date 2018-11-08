@@ -35,7 +35,7 @@ import java.util.*;
  *
  * @author Paul Liu
  */
-public class MyApplet extends JApplet {
+public class MyApplet extends Panel {
 
     private JPanel cards = null;
     private java.util.logging.Logger logger = null;
@@ -56,13 +56,18 @@ public class MyApplet extends JApplet {
     private JSlider utilitiesExtruderHeightPanel = null;
 
     private ResourceBundle resources = ResourceBundle.getBundle("ucrpf1host");
+
+    public MyApplet() {
+	super();
+	init();
+    }
     
     /**
      * init the UI layout and connect the ActionListeners
      */
     public void init() {
-	super.init();
-	Container cp = getContentPane();
+	//super.init();
+	Container cp = this;
 
 	this.logger = java.util.logging.Logger.getLogger(MyApplet.loggerName);
 	this.logger.setLevel(java.util.logging.Level.INFO);
@@ -632,7 +637,7 @@ public class MyApplet extends JApplet {
 	    pf1Device.close(5000);
 	    pf1Device = null;
 	}
-	super.stop();
+	//super.stop();
     }
 
     /**

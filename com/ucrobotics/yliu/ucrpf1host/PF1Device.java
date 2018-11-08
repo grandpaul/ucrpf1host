@@ -85,6 +85,9 @@ public class PF1Device {
 	Enumeration ports = CommPortIdentifier.getPortIdentifiers();
 	while (ports.hasMoreElements()) {
 	    CommPortIdentifier port = (CommPortIdentifier) ports.nextElement();
+	    if (port == null) {
+		continue;
+	    }
 	    if (port.getPortType() != CommPortIdentifier.PORT_SERIAL) {
 		continue;
 	    }
@@ -102,8 +105,9 @@ public class PF1Device {
      */
     public static ArrayList<String> listDevices() {
 	ArrayList<String> ret = new ArrayList<String>();
+	java.util.logging.Logger.getLogger(PF1Device.loggerName).info(String.format("Start listing devices"));
 	Enumeration ports = CommPortIdentifier.getPortIdentifiers();
-	while (ports.hasMoreElements()) {
+	while (ports != null && ports.hasMoreElements()) {
 	    CommPortIdentifier port = (CommPortIdentifier) ports.nextElement();
 	    java.util.logging.Logger.getLogger(PF1Device.loggerName).info(String.format("Found device name: %1$s", port.getName()));
 	    if (port.getPortType() != CommPortIdentifier.PORT_SERIAL) {
